@@ -7,6 +7,7 @@
 |
 */
 
+import GymController from '#controllers/GymController'
 import router from '@adonisjs/core/services/router'
 
 router.get('/', async () => {
@@ -14,3 +15,10 @@ router.get('/', async () => {
     hello: 'world',
   }
 })
+
+router
+  .group(() => {
+    router.post('/gym', [GymController, 'store']).as('gym.store')
+    router.get('/gyms', [GymController, 'list']).as('gym.list')
+  })
+  .prefix('/api')

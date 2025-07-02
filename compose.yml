@@ -1,0 +1,27 @@
+services:
+  db:
+    image: mariadb:11.8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+    volumes:
+      - db_data:/var/lib/mysql
+
+  api:
+      image: node:20
+      working_dir: /app
+      volumes:
+          - ./backend:/app
+      depends_on:
+          - db
+      environment:
+          DB_HOST: ${DB_HOST}
+          DB_USER: ${DB_USER}
+          DB_PASSWORD: ${DB_PASSWORD}
+          DB_DATABASE: ${DB_DATABASE}
+      command: ["npm", "run", "dev"]
+      ports:
+          - "3333:3333"
+
+volumes:
+  db_data:
