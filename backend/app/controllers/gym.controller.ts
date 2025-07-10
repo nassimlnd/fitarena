@@ -3,8 +3,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class GymController {
   async store({ request, response, auth }: HttpContext) {
-    const user = auth.user!
-
     const gymData = {
       ...request.only(['name', 'contact', 'description']),
     }
