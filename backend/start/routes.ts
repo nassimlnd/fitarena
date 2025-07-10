@@ -7,7 +7,7 @@
 |
 */
 
-import GymController from '#controllers/GymController'
+const GymController = () => import('#controllers/gym.controller')
 import router from '@adonisjs/core/services/router'
 
 router.get('/', async () => {

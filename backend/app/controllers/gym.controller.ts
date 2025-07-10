@@ -6,11 +6,7 @@ export default class GymController {
     const user = auth.user!
 
     const gymData = {
-      ...request.only([
-        'name',
-        'contact',
-        'description',
-      ]),
+      ...request.only(['name', 'contact', 'description']),
     }
 
     const gym = await Gym.create(gymData)
