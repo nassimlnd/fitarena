@@ -12,6 +12,7 @@ export default class extends BaseSchema {
       table.string('name', 254).nullable()
       table.string('contact', 254).nullable()
       table.string('description', 254).notNullable()
+      table.integer('owner_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
     })
   }
 
