@@ -10,6 +10,8 @@
 const GymController = () => import('#controllers/gym.controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import { group } from 'console'
+import AuthController from '#controllers/auth.controller'
 
 router.get('/', async () => {
   return {
@@ -24,5 +26,14 @@ router
       .as('gym.store')
       .use([middleware.auth(), middleware.admin()])
     router.get('/gyms', [GymController, 'list']).as('gym.list')
+  })
+  .prefix('/api')
+
+router
+  .group(() => {
+    router
+      .post('/login', [AuthController, 'login'])
+      .as('auth.login')
+    router.post('/register', [AuthController, 'register'])
   })
   .prefix('/api')
