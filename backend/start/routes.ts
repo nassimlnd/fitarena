@@ -26,6 +26,9 @@ router
       .as('gym.store')
       .use([middleware.auth(), middleware.gymOwner()])
     router.get('/gyms', [GymController, 'list']).as('gym.list')
+    router.put('/gym/:id', [GymController, 'update'])
+      .as('gym.update')
+      .use([middleware.auth(), middleware.gymOwner()])
   })
   .prefix('/api')
 

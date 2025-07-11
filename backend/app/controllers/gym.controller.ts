@@ -25,4 +25,26 @@ export default class GymController {
 
     return response.ok(gyms)
   }
+
+  async update({ params, request, response, auth }: HttpContext) {
+    const userId = auth.user!.id;
+
+    try {
+      const gym = await Gym.findOrFail(params.id)
+
+      if (gym.ownerId !== userId) {
+        return response.forbidden({ message: 'You are not authorized to update this gym' })
+      }
+
+      gym.merge(
+        request.only(['name', 'contact', 'description'])
+      )
+
+      await gym.save()
+
+      return response.ok(gym)
+    } catch (error) {
+      return response.notFound({ message: 'Gym not found' })
+    }
+  }
 }
