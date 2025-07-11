@@ -7,8 +7,9 @@
 |
 */
 
-import GymController from '#controllers/GymController'
+const GymController = () => import('#controllers/gym.controller')
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
 
 router.get('/', async () => {
   return {
@@ -18,7 +19,10 @@ router.get('/', async () => {
 
 router
   .group(() => {
-    router.post('/gym', [GymController, 'store']).as('gym.store')
+    router
+      .post('/gym', [GymController, 'store'])
+      .as('gym.store')
+      .use([middleware.auth(), middleware.admin()])
     router.get('/gyms', [GymController, 'list']).as('gym.list')
   })
   .prefix('/api')
