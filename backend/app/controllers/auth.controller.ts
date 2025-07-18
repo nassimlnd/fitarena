@@ -17,13 +17,13 @@ export default class AuthController {
 
   // @todo register as GymOwner
   async register({ request, response }: HttpContext) {
-    const { fullName, email, password } = request.only(['fullName', 'email', 'password'])
+    const { fullName, email, password, isGymOwner = false } = request.only(['fullName', 'email', 'password', 'isGymOwner'])
 
     const user = await User.create({
       fullName,
       email,
       password,
-      role: 'user',
+      role: isGymOwner ? 'gymOwner' : 'user',
     })
 
     return response.created(user)
