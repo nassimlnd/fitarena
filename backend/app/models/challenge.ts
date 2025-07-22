@@ -3,38 +3,38 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 export default class Challenge extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id!: number
 
   @column()
-  public title: string
+  public title!: string
 
   @column()
-  public description: string
+  public description!: string
 
   @column()
-  public objectives: string
+  public objectives!: string
 
   @column()
-  public recommended_exercises: string
+  public recommended_exercises!: string
 
   @column()
-  public duration: number
+  public duration!: number
 
   @column()
-  public difficulty: 'easy' | 'medium' | 'hard'
+  public difficulty!: 'easy' | 'medium' | 'hard'
 
   @column()
-  public creator_id: number
+  public creator_id!: number
 
   @column()
-  public is_public: boolean
+  public is_public!: boolean
 
   @column()
-  public type: string | null
+  public type!: string | null
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt!: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updatedAt!: DateTime
 } 

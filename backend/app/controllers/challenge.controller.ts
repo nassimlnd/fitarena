@@ -25,6 +25,7 @@ export default class ChallengeController {
       'difficulty',
       'is_public',
       'type',
+      'creator_id',
     ])
     data.creator_id = auth.user?.id || 1
     const challenge = await Challenge.create(data)
@@ -45,6 +46,7 @@ export default class ChallengeController {
       'difficulty',
       'is_public',
       'type',
+      'creator_id',
     ])
     challenge.merge(data)
     await challenge.save()

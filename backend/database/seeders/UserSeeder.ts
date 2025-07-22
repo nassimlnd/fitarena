@@ -14,7 +14,7 @@ export default class UserSeeder {
         fullName: 'Owner User',
         email: 'owner@example.com',
         password: await hash.make('password'),
-        role: 'owner',
+        role: 'gymOwner',
       },
       {
         fullName: 'Regular User',
