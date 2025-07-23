@@ -3,16 +3,16 @@ import ChallengeClient from '#models/challengeclient'
 
 export default class ChallengeControllerClient {
   async index({ request, response }: HttpContext) {
-    const { difficulty, type, min_duration, max_duration } = request.qs()
+    const { difficulty, type, minDuration, maxDuration } = request.qs()
     const query = ChallengeClient.query().where('is_public', true)
 
     if (difficulty) query.where('difficulty', difficulty)
 
     if (type) query.where('type', type)
 
-    if (min_duration) query.where('duration', '>=', Number(min_duration))
+    if (minDuration) query.where('duration', '>=', Number(minDuration))
 
-    if (max_duration) query.where('duration', '<=', Number(max_duration))
+    if (maxDuration) query.where('duration', '<=', Number(maxDuration))
 
     const challenges = await query
 

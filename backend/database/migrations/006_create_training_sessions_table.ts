@@ -8,7 +8,7 @@ export default class TrainingSessions extends BaseSchema {
       table.increments('id')
       table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table
-        .integer('challenge_id')
+        .integer('challengeId')
         .unsigned()
         .references('id')
         .inTable('challenge_clients')
@@ -16,7 +16,7 @@ export default class TrainingSessions extends BaseSchema {
         .nullable()
       table.date('date').notNullable()
       table.integer('duration').notNullable()
-      table.integer('calories_burned').notNullable()
+      table.integer('caloriesBurned').notNullable()
       table.json('metrics').nullable()
       table.timestamps(true)
     })

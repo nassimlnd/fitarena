@@ -4,14 +4,14 @@ import GroupChallengeParticipant from '#models/group_challenge_participant'
 
 export default class GroupChallengeController {
   async store({ request, response, auth }: HttpContext) {
-    const { challenge_id, group_name } = request.only(['challenge_id', 'group_name'])
+    const { challengeId, goupName } = request.only(['challengeId', 'goupName'])
     const group = await GroupChallenge.create({
-      challenge_id,
-      group_name,
+      challengeId,
+      goupName,
       created_by: auth.user!.id,
     })
     await GroupChallengeParticipant.create({
-      group_challenge_id: group.id,
+      group_challengeId: group.id,
       user_id: auth.user!.id,
     })
     return response.created(group)
@@ -21,12 +21,12 @@ export default class GroupChallengeController {
     const groupId = params.id
     const userId = auth.user!.id
     const exists = await GroupChallengeParticipant.query()
-      .where('group_challenge_id', groupId)
+      .where('group_challengeId', groupId)
       .andWhere('user_id', userId)
       .first()
     if (exists) return response.conflict({ message: 'Already joined' })
     await GroupChallengeParticipant.create({
-      group_challenge_id: groupId,
+      group_challengeId: groupId,
       user_id: userId,
     })
     return response.ok({ message: 'Joined group challenge' })
@@ -38,7 +38,7 @@ export default class GroupChallengeController {
       return response.badRequest({ message: 'user_id is required or user must be authenticated' })
     }
     const groupLinks = await GroupChallengeParticipant.query().where('user_id', userId)
-    const groupIds = groupLinks.map((g) => g.group_challenge_id)
+    const groupIds = groupLinks.map((g) => g.group_challengeId)
     const groups = groupIds.length > 0 ? await GroupChallenge.query().whereIn('id', groupIds) : []
     return response.ok(groups)
   }

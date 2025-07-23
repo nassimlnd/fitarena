@@ -6,7 +6,7 @@ export default class GroupChallengeParticipant extends BaseModel {
   declare id: number
 
   @column()
-  declare group_challenge_id: number
+  declare group_challengeId: number
 
   @column()
   declare user_id: number

@@ -3,18 +3,18 @@ import TrainingSession from '#models/training_session'
 
 export default class TrainingSessionController {
   async store({ request, response, auth }: HttpContext) {
-    const { challenge_id, date, duration, calories_burned, metrics } = request.only([
-      'challenge_id',
+    const { challengeId, date, duration, caloriesBurned, metrics } = request.only([
+      'challengeId',
       'date',
       'duration',
-      'calories_burned',
+      'caloriesBurned',
       'metrics',
     ])
     const session = await TrainingSession.create({
-      challenge_id,
+      challengeId,
       date,
       duration,
-      calories_burned,
+      caloriesBurned,
       metrics,
       user_id: auth.user!.id,
     })
@@ -41,12 +41,12 @@ export default class TrainingSessionController {
     }
 
     const sessions = await TrainingSession.query().where('user_id', userId)
-    const totalCalories = sessions.reduce((sum, s) => sum + (s.calories_burned || 0), 0)
+    const totalCalories = sessions.reduce((sum, s) => sum + (s.caloriesBurned || 0), 0)
     const totalDuration = sessions.reduce((sum, s) => sum + (s.duration || 0), 0)
     const challengeProgress: Record<number, number> = {}
     sessions.forEach((s) => {
-      if (s.challenge_id) {
-        challengeProgress[s.challenge_id] = (challengeProgress[s.challenge_id] || 0) + 1
+      if (s.challengeId) {
+        challengeProgress[s.challengeId] = (challengeProgress[s.challengeId] || 0) + 1
       }
     })
 

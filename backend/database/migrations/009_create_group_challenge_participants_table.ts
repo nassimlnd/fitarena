@@ -7,7 +7,7 @@ export default class GroupChallengeParticipants extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
-        .integer('group_challenge_id')
+        .integer('group_challengeId')
         .unsigned()
         .references('id')
         .inTable('group_challenges')
