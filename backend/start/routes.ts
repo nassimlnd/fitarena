@@ -77,7 +77,10 @@ router
       .post('/challenge_invitations', [ChallengeInvitationController, 'store'])
       .use([middleware.auth()])
     router
-      .get('/challenge_invitations', [ChallengeInvitationController, 'index'])
+      .get('/challenge_invitations/sent', [ChallengeInvitationController, 'sent'])
+      .use([middleware.auth()])
+    router
+      .get('/challenge_invitations/received', [ChallengeInvitationController, 'received'])
       .use([middleware.auth()])
     router
       .post('/challenge_invitations/:id/respond', [ChallengeInvitationController, 'respond'])
