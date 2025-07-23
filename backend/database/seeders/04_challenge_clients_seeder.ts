@@ -1,28 +1,30 @@
-import ChallengeClient from '#models/challengeclient'
+import Challenge from '#models/challenge'
 
 export default class ChallengeSeeder {
   public async run() {
-    await ChallengeClient.createMany([
+    await Challenge.createMany([
       {
-        title: '30-Day Pushup Challenge',
+        name: '30-Day Pushup Challenge',
         description: 'Do pushups every day for 30 days.',
         objectives: 'Increase upper body strength.',
-        recommended_exercises: JSON.stringify(['Pushup']),
+        recommendedExercises: JSON.stringify(['Pushup']),
         duration: 30,
         difficulty: 'medium',
-        creator_id: 1,
-        is_public: true,
+        creatorId: 1,
+        creatorType: 'user',
+        isPublic: true,
         type: 'strength',
       },
       {
-        title: 'Squat Endurance',
+        name: 'Squat Endurance',
         description: 'Perform squats daily for two weeks.',
         objectives: 'Improve lower body endurance.',
-        recommended_exercises: JSON.stringify(['Squat']),
+        recommendedExercises: JSON.stringify(['Squat']),
         duration: 14,
         difficulty: 'easy',
-        creator_id: 2,
-        is_public: true,
+        creatorId: 2,
+        creatorType: 'user',
+        isPublic: true,
         type: 'endurance',
       },
     ])

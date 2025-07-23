@@ -5,7 +5,7 @@ export default class TrainingSessionSeeder {
   public async run() {
     await TrainingSession.createMany([
       {
-        user_id: 1,
+        userId: 1,
         challengeId: 1,
         date: DateTime.now().minus({ days: 2 }),
         duration: 45,
@@ -13,7 +13,7 @@ export default class TrainingSessionSeeder {
         metrics: { reps: 100, sets: 5 },
       },
       {
-        user_id: 1,
+        userId: 1,
         challengeId: 2,
         date: DateTime.now().minus({ days: 1 }),
         duration: 30,
@@ -21,7 +21,7 @@ export default class TrainingSessionSeeder {
         metrics: { distance: 3, unit: 'km' },
       },
       {
-        user_id: 2,
+        userId: 2,
         challengeId: 1,
         date: DateTime.now(),
         duration: 60,
@@ -29,7 +29,7 @@ export default class TrainingSessionSeeder {
         metrics: { reps: 150, sets: 6 },
       },
       {
-        user_id: 2,
+        userId: 2,
         challengeId: null,
         date: DateTime.now().minus({ days: 3 }),
         duration: 20,
