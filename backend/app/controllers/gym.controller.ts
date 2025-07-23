@@ -3,8 +3,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class GymController {
   async store({ request, response, auth }: HttpContext) {
-    const userId = auth.user!.id;
-    const gyms = await Gym.findBy('owner_id', userId);
+    const userId = auth.user!.id
+    const gyms = await Gym.findBy('owner_id', userId)
 
     if (gyms) {
       return response.conflict({ message: 'You already own a gym' })
@@ -27,7 +27,7 @@ export default class GymController {
   }
 
   async update({ params, request, response, auth }: HttpContext) {
-    const userId = auth.user!.id;
+    const userId = auth.user!.id
 
     try {
       const gym = await Gym.findOrFail(params.id)
@@ -36,9 +36,7 @@ export default class GymController {
         return response.forbidden({ message: 'You are not authorized to update this gym' })
       }
 
-      gym.merge(
-        request.only(['name', 'contact', 'description'])
-      )
+      gym.merge(request.only(['name', 'contact', 'description']))
 
       await gym.save()
 

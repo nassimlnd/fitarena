@@ -8,10 +8,10 @@
 */
 
 const GymController = () => import('#controllers/gym.controller')
+const AuthController = () => import('#controllers/auth.controller')
+const ChallengeControllerClient = () => import('#controllers/challenge.controller.client')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import { group } from 'console'
-import AuthController from '#controllers/auth.controller'
 
 router.get('/', async () => {
   return {
@@ -26,7 +26,8 @@ router
       .as('gym.store')
       .use([middleware.auth(), middleware.gymOwner()])
     router.get('/gyms', [GymController, 'list']).as('gym.list')
-    router.put('/gym/:id', [GymController, 'update'])
+    router
+      .put('/gym/:id', [GymController, 'update'])
       .as('gym.update')
       .use([middleware.auth(), middleware.gymOwner()])
   })
@@ -34,9 +35,9 @@ router
 
 router
   .group(() => {
-    router
-      .post('/login', [AuthController, 'login'])
-      .as('auth.login')
+    router.post('/login', [AuthController, 'login']).as('auth.login')
     router.post('/register', [AuthController, 'register'])
   })
   .prefix('/api')
+
+router.resource('challenge_clients', ChallengeControllerClient).apiOnly()
