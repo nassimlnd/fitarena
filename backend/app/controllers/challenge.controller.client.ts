@@ -1,5 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Challenge from '#models/challenge'
+import Challenge from '#models/challengeclient'
 
 export default class ChallengeController {
   async index({ response }: HttpContext) {

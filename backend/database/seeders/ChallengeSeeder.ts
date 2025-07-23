@@ -1,4 +1,4 @@
-import Challenge from '#models/challenge'
+import Challenge from '#models/challengeclient'
 
 export default class ChallengeSeeder {
   public async run() {
