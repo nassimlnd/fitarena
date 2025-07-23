@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import User from './user.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
@@ -24,6 +24,9 @@ export default class Gym extends BaseModel {
 
   @column()
   declare ownerId: number
+
+  @column()
+  declare status: 'pending' | 'approved' | 'rejected'
 
   @belongsTo(() => User, {
     foreignKey: 'ownerId',
