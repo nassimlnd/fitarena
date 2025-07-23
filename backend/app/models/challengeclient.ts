@@ -1,40 +1,47 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import User from './user.js'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export default class ChallengeClient extends BaseModel {
   @column({ isPrimary: true })
-  public id!: number
+  declare id: number
 
   @column()
-  public title!: string
+  declare title: string
 
   @column()
-  public description!: string
+  declare description: string
 
   @column()
-  public objectives!: string
+  declare objectives: string
 
   @column()
-  public recommended_exercises!: string
+  declare recommended_exercises: string
 
   @column()
-  public duration!: number
+  declare duration: number
 
   @column()
-  public difficulty!: 'easy' | 'medium' | 'hard'
+  declare difficulty: 'easy' | 'medium' | 'hard'
 
   @column()
-  public creator_id!: number
+  declare creator_id: number
 
   @column()
-  public is_public!: boolean
+  declare is_public: boolean
 
   @column()
-  public type!: string | null
+  declare type: string | null
+
+  @belongsTo(() => User, {
+    foreignKey: 'creator_id',
+  })
+  declare creator: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })
-  public createdAt!: DateTime
+  declare createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt!: DateTime
-} 
+  declare updatedAt: DateTime
+}

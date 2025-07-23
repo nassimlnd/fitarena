@@ -21,7 +21,7 @@ export default class ChallengeSeeder {
         recommended_exercises: JSON.stringify(['Squat']),
         duration: 14,
         difficulty: 'easy',
-        creator_id: 1,
+        creator_id: 2,
         is_public: true,
         type: 'endurance',
       },

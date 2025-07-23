@@ -27,7 +27,7 @@ export default class ChallengeControllerClient {
       'type',
       'creator_id',
     ])
-    data.creator_id = auth.user?.id || 1
+    data.creator_id = auth.user?.id
     const challenge = await ChallengeClient.create(data)
     return response.created(challenge)
   }
