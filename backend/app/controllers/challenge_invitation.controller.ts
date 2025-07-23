@@ -1,9 +1,15 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import ChallengeInvitation from '#models/challenge_invitation'
+import {
+  createChallengeInvitationValidator,
+  respondChallengeInvitationValidator,
+} from '#validators/challenge_invitation'
 
 export default class ChallengeInvitationController {
   async store({ request, response, auth }: HttpContext) {
-    const { inviteeId, challengeId } = request.only(['inviteeId', 'challengeId'])
+    const { inviteeId, challengeId } = await request.validateUsing(
+      createChallengeInvitationValidator
+    )
     const invite = await ChallengeInvitation.create({
       inviterId: auth.user!.id,
       inviteeId,
@@ -15,10 +21,10 @@ export default class ChallengeInvitationController {
   }
 
   async index({ request, response, auth }: HttpContext) {
-    const userId = request.input('user_id') || auth.user?.id
+    const userId = request.input('userId') || auth.user?.id
 
     if (!userId) {
-      return response.badRequest({ message: 'user_id is required or user must be authenticated' })
+      return response.badRequest({ message: 'userId is required or user must be authenticated' })
     }
 
     const invites = await ChallengeInvitation.query()
@@ -30,7 +36,7 @@ export default class ChallengeInvitationController {
 
   async respond({ params, request, response, auth }: HttpContext) {
     const { id } = params
-    const { status } = request.only(['status'])
+    const { status } = await request.validateUsing(respondChallengeInvitationValidator)
     const userId = auth.user!.id
     const invite = await ChallengeInvitation.find(id)
 
@@ -38,10 +44,6 @@ export default class ChallengeInvitationController {
 
     if (invite.inviteeId !== userId) {
       return response.forbidden({ message: 'Not your invitation' })
-    }
-
-    if (!['accepted', 'declined'].includes(status)) {
-      return response.badRequest({ message: 'Invalid status' })
     }
 
     invite.status = status

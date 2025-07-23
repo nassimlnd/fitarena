@@ -1,46 +1,37 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import TrainingSession from '#models/training_session'
+import { createTrainingSessionValidator } from '#validators/training_session'
 
 export default class TrainingSessionController {
   async store({ request, response, auth }: HttpContext) {
-    const { challengeId, date, duration, caloriesBurned, metrics } = request.only([
-      'challengeId',
-      'date',
-      'duration',
-      'caloriesBurned',
-      'metrics',
-    ])
+    const payload = await request.validateUsing(createTrainingSessionValidator)
     const session = await TrainingSession.create({
-      challengeId,
-      date,
-      duration,
-      caloriesBurned,
-      metrics,
-      user_id: auth.user!.id,
+      ...payload,
+      userId: auth.user!.id,
     })
 
     return response.created(session)
   }
 
   async index({ request, response, auth }: HttpContext) {
-    const userId = request.input('user_id') || auth.user?.id
+    const userId = request.input('userId') || auth.user?.id
 
     if (!userId) {
-      return response.badRequest({ message: 'user_id is required or user must be authenticated' })
+      return response.badRequest({ message: 'userId is required or user must be authenticated' })
     }
 
-    const sessions = await TrainingSession.query().where('user_id', userId)
+    const sessions = await TrainingSession.query().where('userId', userId)
     return response.ok(sessions)
   }
 
   async stats({ request, response, auth }: HttpContext) {
-    const userId = request.input('user_id') || auth.user?.id
+    const userId = request.input('userId') || auth.user?.id
 
     if (!userId) {
-      return response.badRequest({ message: 'user_id is required or user must be authenticated' })
+      return response.badRequest({ message: 'userId is required or user must be authenticated' })
     }
 
-    const sessions = await TrainingSession.query().where('user_id', userId)
+    const sessions = await TrainingSession.query().where('userId', userId)
     const totalCalories = sessions.reduce((sum, s) => sum + (s.caloriesBurned || 0), 0)
     const totalDuration = sessions.reduce((sum, s) => sum + (s.duration || 0), 0)
     const challengeProgress: Record<number, number> = {}

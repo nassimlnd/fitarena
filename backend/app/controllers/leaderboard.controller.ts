@@ -12,14 +12,14 @@ export default class LeaderboardController {
     const sessions = await TrainingSession.query().where('challengeId', challengeId)
     const leaderboard: Record<
       number,
-      { user_id: number; total_duration: number; total_calories: number }
+      { userId: number; total_duration: number; total_calories: number }
     > = {}
     sessions.forEach((s) => {
-      if (!leaderboard[s.user_id]) {
-        leaderboard[s.user_id] = { user_id: s.user_id, total_duration: 0, total_calories: 0 }
+      if (!leaderboard[s.userId]) {
+        leaderboard[s.userId] = { userId: s.userId, total_duration: 0, total_calories: 0 }
       }
-      leaderboard[s.user_id].total_duration += s.duration || 0
-      leaderboard[s.user_id].total_calories += s.caloriesBurned || 0
+      leaderboard[s.userId].total_duration += s.duration || 0
+      leaderboard[s.userId].total_calories += s.caloriesBurned || 0
     })
     const sorted = Object.values(leaderboard).sort((a, b) => b.total_duration - a.total_duration)
 
