@@ -1,14 +1,14 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Challenge from '#models/challengeclient'
+import ChallengeClient from '#models/challengeclient'
 
-export default class ChallengeController {
+export default class ChallengeControllerClient {
   async index({ response }: HttpContext) {
-    const challenges = await Challenge.all()
+    const challenges = await ChallengeClient.all()
     return response.ok(challenges)
   }
 
   async show({ params, response }: HttpContext) {
-    const challenge = await Challenge.find(params.id)
+    const challenge = await ChallengeClient.find(params.id)
     if (!challenge) {
       return response.notFound({ message: 'Challenge not found' })
     }
@@ -28,12 +28,12 @@ export default class ChallengeController {
       'creator_id',
     ])
     data.creator_id = auth.user?.id || 1
-    const challenge = await Challenge.create(data)
+    const challenge = await ChallengeClient.create(data)
     return response.created(challenge)
   }
 
   async update({ params, request, response }: HttpContext) {
-    const challenge = await Challenge.find(params.id)
+    const challenge = await ChallengeClient.find(params.id)
     if (!challenge) {
       return response.notFound({ message: 'Challenge not found' })
     }
@@ -54,7 +54,7 @@ export default class ChallengeController {
   }
 
   async destroy({ params, response }: HttpContext) {
-    const challenge = await Challenge.find(params.id)
+    const challenge = await ChallengeClient.find(params.id)
     if (!challenge) {
       return response.notFound({ message: 'Challenge not found' })
     }

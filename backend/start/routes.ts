@@ -12,7 +12,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 import { group } from 'console'
 import AuthController from '#controllers/auth.controller'
-import ChallengeController from '#controllers/challenge.controller.client'
+import ChallengeControllerClient from '#controllers/challenge.controller.client'
 
 router.get('/', async () => {
   return {
@@ -42,4 +42,4 @@ router
   })
   .prefix('/api')
 
-router.resource('challenges', ChallengeController).apiOnly()
+router.resource('challenge_clients', ChallengeControllerClient).apiOnly()

@@ -1,8 +1,8 @@
-import Challenge from '#models/challengeclient'
+import ChallengeClient from '#models/challengeclient'
 
 export default class ChallengeSeeder {
   public async run() {
-    await Challenge.createMany([
+    await ChallengeClient.createMany([
       {
         title: '30-Day Pushup Challenge',
         description: 'Do pushups every day for 30 days.',

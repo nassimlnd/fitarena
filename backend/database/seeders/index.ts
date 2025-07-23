@@ -8,7 +8,7 @@ export default class DatabaseSeeder {
   public async run() {
     // Truncate tables and disable foreign key checks
     await db.rawQuery('SET FOREIGN_KEY_CHECKS = 0;')
-    await db.rawQuery('TRUNCATE TABLE challenges;')
+    await db.rawQuery('TRUNCATE TABLE challenge_clients;')
     await db.rawQuery('TRUNCATE TABLE gyms;')
     await db.rawQuery('TRUNCATE TABLE exercises;')
     await db.rawQuery('TRUNCATE TABLE users;')

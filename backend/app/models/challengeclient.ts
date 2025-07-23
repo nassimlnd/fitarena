@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
-export default class Challenge extends BaseModel {
+export default class ChallengeClient extends BaseModel {
   @column({ isPrimary: true })
   public id!: number
 
