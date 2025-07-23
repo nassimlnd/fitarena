@@ -3,7 +3,7 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 export default class ChallengesClient extends BaseSchema {
   protected tableName = 'challenge_clients'
 
-  public async up () {
+  public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('title').notNullable()
@@ -19,7 +19,7 @@ export default class ChallengesClient extends BaseSchema {
     })
   }
 
-  public async down () {
+  public async down() {
     this.schema.dropTable(this.tableName)
   }
-} 
+}

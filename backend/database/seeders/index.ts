@@ -1,8 +1,8 @@
 import db from '@adonisjs/lucid/services/db'
-import UserSeeder from './UserSeeder.js'
-import GymSeeder from './GymSeeder.js'
-import ExerciseSeeder from './ExerciseSeeder.js'
-import ChallengeSeeder from './ChallengeSeeder.js'
+import UserSeeder from './user_seeder.js'
+import GymSeeder from './gym_seeder.js'
+import ExerciseSeeder from './exercise_seeder.js'
+import ChallengeSeeder from './challenge_clients_seeder.js'
 
 export default class DatabaseSeeder {
   public async run() {
