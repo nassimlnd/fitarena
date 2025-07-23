@@ -1,6 +1,10 @@
 import ChallengeInvitation from '#models/challenge_invitation'
 import { BaseRepositoryInterface } from './base_repository.js'
-import { CreateInvitationDTO, UpdateInvitationDTO, InvitationFilterOptions } from '../types/invitation.dto.js'
+import {
+  CreateInvitationDTO,
+  UpdateInvitationDTO,
+  InvitationFilterOptions,
+} from '../types/invitation.dto.js'
 import { FilterOptions, PaginationOptions } from '../types/common_types.js'
 
 type CreateInvitationData = CreateInvitationDTO & {
@@ -8,8 +12,9 @@ type CreateInvitationData = CreateInvitationDTO & {
   status: 'pending' | 'accepted' | 'declined'
 }
 
-export class InvitationRepository implements BaseRepositoryInterface<ChallengeInvitation, CreateInvitationData, UpdateInvitationDTO> {
-
+export class InvitationRepository
+  implements BaseRepositoryInterface<ChallengeInvitation, CreateInvitationData, UpdateInvitationDTO>
+{
   async create(data: CreateInvitationData): Promise<ChallengeInvitation> {
     return await ChallengeInvitation.create(data)
   }
@@ -18,7 +23,10 @@ export class InvitationRepository implements BaseRepositoryInterface<ChallengeIn
     return await ChallengeInvitation.find(id)
   }
 
-  async findMany(filters?: FilterOptions, pagination?: PaginationOptions): Promise<ChallengeInvitation[]> {
+  async findMany(
+    filters?: FilterOptions,
+    pagination?: PaginationOptions
+  ): Promise<ChallengeInvitation[]> {
     let query = ChallengeInvitation.query()
 
     if (filters) {
@@ -102,7 +110,11 @@ export class InvitationRepository implements BaseRepositoryInterface<ChallengeIn
     return await query.orderBy('createdAt', 'desc')
   }
 
-  async findExistingInvitation(inviterId: number, inviteeId: number, challengeId: number): Promise<ChallengeInvitation | null> {
+  async findExistingInvitation(
+    inviterId: number,
+    inviteeId: number,
+    challengeId: number
+  ): Promise<ChallengeInvitation | null> {
     return await ChallengeInvitation.query()
       .where('inviterId', inviterId)
       .where('inviteeId', inviteeId)
@@ -121,26 +133,26 @@ export class InvitationRepository implements BaseRepositoryInterface<ChallengeIn
     declinedReceived: number
   }> {
     const [sent, received] = await Promise.all([
-      ChallengeInvitation.query()
-        .where('inviterId', userId)
-        .select('status')
-        .exec(),
-      
-      ChallengeInvitation.query()
-        .where('inviteeId', userId)
-        .select('status')
-        .exec()
+      ChallengeInvitation.query().where('inviterId', userId).select('status').exec(),
+
+      ChallengeInvitation.query().where('inviteeId', userId).select('status').exec(),
     ])
 
-    const sentStats = sent.reduce((acc, inv) => {
-      acc[inv.status] = (acc[inv.status] || 0) + 1
-      return acc
-    }, { pending: 0, accepted: 0, declined: 0 })
+    const sentStats = sent.reduce(
+      (acc, inv) => {
+        acc[inv.status] = (acc[inv.status] || 0) + 1
+        return acc
+      },
+      { pending: 0, accepted: 0, declined: 0 }
+    )
 
-    const receivedStats = received.reduce((acc, inv) => {
-      acc[inv.status] = (acc[inv.status] || 0) + 1
-      return acc
-    }, { pending: 0, accepted: 0, declined: 0 })
+    const receivedStats = received.reduce(
+      (acc, inv) => {
+        acc[inv.status] = (acc[inv.status] || 0) + 1
+        return acc
+      },
+      { pending: 0, accepted: 0, declined: 0 }
+    )
 
     return {
       totalSent: sent.length,

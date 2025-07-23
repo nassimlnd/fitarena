@@ -1,6 +1,10 @@
 import TrainingSession from '#models/training_session'
 import { BaseRepositoryInterface } from './base_repository.js'
-import { CreateTrainingSessionDTO, UpdateTrainingSessionDTO, TrainingSessionFilterOptions } from '../types/training_session.dto.js'
+import {
+  CreateTrainingSessionDTO,
+  UpdateTrainingSessionDTO,
+  TrainingSessionFilterOptions,
+} from '../types/training_session.dto.js'
 import { FilterOptions, PaginationOptions } from '../types/common_types.js'
 import { DateTime } from 'luxon'
 
@@ -8,8 +12,10 @@ type CreateTrainingSessionData = CreateTrainingSessionDTO & {
   userId: number
 }
 
-export class TrainingSessionRepository implements BaseRepositoryInterface<TrainingSession, CreateTrainingSessionData, UpdateTrainingSessionDTO> {
-
+export class TrainingSessionRepository
+  implements
+    BaseRepositoryInterface<TrainingSession, CreateTrainingSessionData, UpdateTrainingSessionDTO>
+{
   async create(data: CreateTrainingSessionData): Promise<TrainingSession> {
     const createData = {
       ...data,
@@ -22,7 +28,10 @@ export class TrainingSessionRepository implements BaseRepositoryInterface<Traini
     return await TrainingSession.find(id)
   }
 
-  async findMany(filters?: FilterOptions, pagination?: PaginationOptions): Promise<TrainingSession[]> {
+  async findMany(
+    filters?: FilterOptions,
+    pagination?: PaginationOptions
+  ): Promise<TrainingSession[]> {
     let query = TrainingSession.query()
 
     if (filters) {
@@ -46,7 +55,11 @@ export class TrainingSessionRepository implements BaseRepositoryInterface<Traini
 
     const updateData = {
       ...data,
-      date: data.date ? (typeof data.date === 'string' ? DateTime.fromISO(data.date) : data.date) : undefined,
+      date: data.date
+        ? typeof data.date === 'string'
+          ? DateTime.fromISO(data.date)
+          : data.date
+        : undefined,
     }
 
     session.merge(updateData)
@@ -126,18 +139,18 @@ export class TrainingSessionRepository implements BaseRepositoryInterface<Traini
         .sum('caloriesBurned as totalCalories')
         .count('* as totalSessions')
         .first(),
-      
+
       TrainingSession.query()
         .where('userId', userId)
         .where('date', '>=', weekStart.toSQLDate())
         .count('* as sessionsThisWeek')
         .first(),
-      
+
       TrainingSession.query()
         .where('userId', userId)
         .where('date', '>=', monthStart.toSQLDate())
         .count('* as sessionsThisMonth')
-        .first()
+        .first(),
     ])
 
     return {

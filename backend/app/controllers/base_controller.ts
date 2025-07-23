@@ -13,7 +13,7 @@ export abstract class BaseController {
 
   protected getValidId(paramValue: string, paramName: string = 'ID'): number {
     const id = Number(paramValue)
-    if (isNaN(id)) {
+    if (Number.isNaN(id)) {
       throw new ServiceException(`Invalid ${paramName}`, 'INVALID_PARAM', 400)
     }
     return id

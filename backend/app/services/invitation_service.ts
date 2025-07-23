@@ -1,7 +1,11 @@
 import { InvitationRepository } from '../repositories/invitation_repository.js'
 import { ChallengeRepository } from '../repositories/challenge_repository.js'
 import { UserRepository } from '../repositories/user_repository.js'
-import { CreateInvitationDTO, InvitationData, InvitationStatsData } from '../types/invitation.dto.js'
+import {
+  CreateInvitationDTO,
+  InvitationData,
+  InvitationStatsData,
+} from '../types/invitation.dto.js'
 import { ServiceResponse, ServiceException } from '../types/common_types.js'
 
 export class InvitationService {
@@ -15,7 +19,10 @@ export class InvitationService {
     this.userRepository = new UserRepository()
   }
 
-  async createInvitation(data: CreateInvitationDTO, inviterId: number): Promise<ServiceResponse<InvitationData>> {
+  async createInvitation(
+    data: CreateInvitationDTO,
+    inviterId: number
+  ): Promise<ServiceResponse<InvitationData>> {
     try {
       // Vérifier que le challenge existe
       const challenge = await this.challengeRepository.findById(data.challengeId)
@@ -42,7 +49,11 @@ export class InvitationService {
       )
 
       if (existingInvitation) {
-        throw new ServiceException('An invitation for this challenge already exists for this user', 'INVITATION_ALREADY_EXISTS', 409)
+        throw new ServiceException(
+          'An invitation for this challenge already exists for this user',
+          'INVITATION_ALREADY_EXISTS',
+          409
+        )
       }
 
       const invitationData = {
@@ -65,7 +76,10 @@ export class InvitationService {
     }
   }
 
-  async getInvitation(invitationId: number, userId: number): Promise<ServiceResponse<InvitationData>> {
+  async getInvitation(
+    invitationId: number,
+    userId: number
+  ): Promise<ServiceResponse<InvitationData>> {
     try {
       const invitation = await this.invitationRepository.findById(invitationId)
       if (!invitation) {
@@ -74,7 +88,11 @@ export class InvitationService {
 
       // Vérifier que l'utilisateur peut accéder à cette invitation
       if (invitation.inviterId !== userId && invitation.inviteeId !== userId) {
-        throw new ServiceException('You are not authorized to view this invitation', 'INVITATION_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to view this invitation',
+          'INVITATION_UNAUTHORIZED',
+          403
+        )
       }
 
       return {
@@ -95,7 +113,7 @@ export class InvitationService {
 
       return {
         success: true,
-        data: invitations.map(invitation => this.formatInvitationData(invitation)),
+        data: invitations.map((invitation) => this.formatInvitationData(invitation)),
       }
     } catch (error) {
       throw new ServiceException('Failed to fetch sent invitations', 'INVITATION_FETCH_FAILED', 500)
@@ -108,14 +126,21 @@ export class InvitationService {
 
       return {
         success: true,
-        data: invitations.map(invitation => this.formatInvitationData(invitation)),
+        data: invitations.map((invitation) => this.formatInvitationData(invitation)),
       }
     } catch (error) {
-      throw new ServiceException('Failed to fetch received invitations', 'INVITATION_FETCH_FAILED', 500)
+      throw new ServiceException(
+        'Failed to fetch received invitations',
+        'INVITATION_FETCH_FAILED',
+        500
+      )
     }
   }
 
-  async getChallengeInvitations(challengeId: number, userId: number): Promise<ServiceResponse<InvitationData[]>> {
+  async getChallengeInvitations(
+    challengeId: number,
+    userId: number
+  ): Promise<ServiceResponse<InvitationData[]>> {
     try {
       // Vérifier que le challenge existe et que l'utilisateur peut y accéder
       const challenge = await this.challengeRepository.findById(challengeId)
@@ -126,24 +151,36 @@ export class InvitationService {
       // Vérifier l'ownership du challenge
       const hasAccess = await this.validateChallengeAccess(challenge, userId)
       if (!hasAccess) {
-        throw new ServiceException('You are not authorized to view invitations for this challenge', 'CHALLENGE_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to view invitations for this challenge',
+          'CHALLENGE_UNAUTHORIZED',
+          403
+        )
       }
 
       const invitations = await this.invitationRepository.findByChallenge(challengeId)
 
       return {
         success: true,
-        data: invitations.map(invitation => this.formatInvitationData(invitation)),
+        data: invitations.map((invitation) => this.formatInvitationData(invitation)),
       }
     } catch (error) {
       if (error instanceof ServiceException) {
         throw error
       }
-      throw new ServiceException('Failed to fetch challenge invitations', 'INVITATION_FETCH_FAILED', 500)
+      throw new ServiceException(
+        'Failed to fetch challenge invitations',
+        'INVITATION_FETCH_FAILED',
+        500
+      )
     }
   }
 
-  async respondToInvitation(invitationId: number, status: 'accepted' | 'declined', userId: number): Promise<ServiceResponse<InvitationData>> {
+  async respondToInvitation(
+    invitationId: number,
+    status: 'accepted' | 'declined',
+    userId: number
+  ): Promise<ServiceResponse<InvitationData>> {
     try {
       const invitation = await this.invitationRepository.findById(invitationId)
       if (!invitation) {
@@ -152,12 +189,20 @@ export class InvitationService {
 
       // Vérifier que l'utilisateur est bien l'invité
       if (invitation.inviteeId !== userId) {
-        throw new ServiceException('You are not authorized to respond to this invitation', 'INVITATION_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to respond to this invitation',
+          'INVITATION_UNAUTHORIZED',
+          403
+        )
       }
 
       // Vérifier que l'invitation est en attente
       if (invitation.status !== 'pending') {
-        throw new ServiceException('This invitation has already been responded to', 'INVITATION_ALREADY_RESPONDED', 409)
+        throw new ServiceException(
+          'This invitation has already been responded to',
+          'INVITATION_ALREADY_RESPONDED',
+          409
+        )
       }
 
       const updatedInvitation = await this.invitationRepository.update(invitationId, { status })
@@ -173,7 +218,11 @@ export class InvitationService {
       if (error instanceof ServiceException) {
         throw error
       }
-      throw new ServiceException('Failed to respond to invitation', 'INVITATION_RESPONSE_FAILED', 500)
+      throw new ServiceException(
+        'Failed to respond to invitation',
+        'INVITATION_RESPONSE_FAILED',
+        500
+      )
     }
   }
 
@@ -186,12 +235,20 @@ export class InvitationService {
 
       // Vérifier que l'utilisateur est bien l'inviteur
       if (invitation.inviterId !== userId) {
-        throw new ServiceException('You are not authorized to cancel this invitation', 'INVITATION_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to cancel this invitation',
+          'INVITATION_UNAUTHORIZED',
+          403
+        )
       }
 
       // Vérifier que l'invitation est en attente
       if (invitation.status !== 'pending') {
-        throw new ServiceException('Cannot cancel an invitation that has already been responded to', 'INVITATION_CANNOT_CANCEL', 409)
+        throw new ServiceException(
+          'Cannot cancel an invitation that has already been responded to',
+          'INVITATION_CANNOT_CANCEL',
+          409
+        )
       }
 
       const deleted = await this.invitationRepository.delete(invitationId)
@@ -220,7 +277,11 @@ export class InvitationService {
         data: stats,
       }
     } catch (error) {
-      throw new ServiceException('Failed to fetch invitation stats', 'INVITATION_STATS_FETCH_FAILED', 500)
+      throw new ServiceException(
+        'Failed to fetch invitation stats',
+        'INVITATION_STATS_FETCH_FAILED',
+        500
+      )
     }
   }
 
