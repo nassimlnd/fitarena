@@ -3,6 +3,7 @@ import UserSeeder from './user_seeder.js'
 import GymSeeder from './gym_seeder.js'
 import ExerciseSeeder from './exercise_seeder.js'
 import ChallengeSeeder from './challenge_clients_seeder.js'
+import TrainingSessionSeeder from './training_session_seeder.js'
 
 export default class DatabaseSeeder {
   public async run() {
@@ -19,5 +20,6 @@ export default class DatabaseSeeder {
     await new GymSeeder().run()
     await new ExerciseSeeder().run()
     await new ChallengeSeeder().run()
+    await new TrainingSessionSeeder().run()
   }
 }
