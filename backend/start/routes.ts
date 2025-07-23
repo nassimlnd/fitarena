@@ -9,11 +9,16 @@
 
 const GymController = () => import('#controllers/gym.controller')
 const AuthController = () => import('#controllers/auth.controller')
-const ChallengeControllerClient = () => import('#controllers/challenge.controller.client')
+const ChallengeClientController = () => import('#controllers/challenge_client.controller')
 const TrainingSessionController = () => import('#controllers/training_session.controller')
 const ChallengeInvitationController = () => import('#controllers/challenge_invitation.controller')
 const GroupChallengeController = () => import('#controllers/group_challenge.controller')
 const LeaderboardController = () => import('#controllers/leaderboard.controller')
+
+// Admin controllers
+const AdminExerciseController = () => import('#controllers/admin/exercise.controller')
+const AdminGymController = () => import('#controllers/admin/gym.controller')
+const AdminUserController = () => import('#controllers/admin/user.controller')
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 
@@ -46,11 +51,15 @@ router
 
 router
   .group(() => {
-    router.get('/challenge_clients', [ChallengeControllerClient, 'index'])
-    router.get('/challenge_clients/:id', [ChallengeControllerClient, 'show'])
-    router.post('/challenge_clients', [ChallengeControllerClient, 'store'])
-    router.put('/challenge_clients/:id', [ChallengeControllerClient, 'update'])
-    router.delete('/challenge_clients/:id', [ChallengeControllerClient, 'destroy'])
+    router.get('/challenge_clients', [ChallengeClientController, 'index'])
+    router.get('/challenge_clients/:id', [ChallengeClientController, 'show'])
+    router.post('/challenge_clients', [ChallengeClientController, 'store']).use([middleware.auth()])
+    router
+      .put('/challenge_clients/:id', [ChallengeClientController, 'update'])
+      .use([middleware.auth()])
+    router
+      .delete('/challenge_clients/:id', [ChallengeClientController, 'destroy'])
+      .use([middleware.auth()])
   })
   .prefix('/api')
 
@@ -83,3 +92,31 @@ router
     router.get('/leaderboard', [LeaderboardController, 'index'])
   })
   .prefix('/api')
+
+// Admin routes
+router
+  .group(() => {
+    // Exercise management
+    router.get('/exercises', [AdminExerciseController, 'index'])
+    router.post('/exercises', [AdminExerciseController, 'store'])
+    router.get('/exercises/:id', [AdminExerciseController, 'show'])
+    router.put('/exercises/:id', [AdminExerciseController, 'update'])
+    router.delete('/exercises/:id', [AdminExerciseController, 'destroy'])
+
+    // Gym management
+    router.get('/gyms', [AdminGymController, 'index'])
+    router.get('/gyms/pending', [AdminGymController, 'pending'])
+    router.get('/gyms/:id', [AdminGymController, 'show'])
+    router.post('/gyms/:id/approve', [AdminGymController, 'approve'])
+    router.post('/gyms/:id/reject', [AdminGymController, 'reject'])
+    router.delete('/gyms/:id', [AdminGymController, 'destroy'])
+
+    // User management
+    router.get('/users', [AdminUserController, 'index'])
+    router.get('/users/:id', [AdminUserController, 'show'])
+    router.put('/users/:id/role', [AdminUserController, 'updateRole'])
+    router.post('/users/:id/deactivate', [AdminUserController, 'deactivate'])
+    router.delete('/users/:id', [AdminUserController, 'destroy'])
+  })
+  .prefix('/api/admin')
+  .use([middleware.admin()])
