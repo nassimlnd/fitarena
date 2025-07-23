@@ -12,7 +12,7 @@ export default class TrainingSession extends BaseModel {
   declare user_id: number
 
   @column()
-  declare challenge_id: number | null
+  declare challengeId: number | null
 
   @column.date()
   declare date: DateTime
@@ -21,7 +21,7 @@ export default class TrainingSession extends BaseModel {
   declare duration: number
 
   @column()
-  declare calories_burned: number
+  declare caloriesBurned: number
 
   @column({
     prepare: (value: any) => JSON.stringify(value),
@@ -32,7 +32,7 @@ export default class TrainingSession extends BaseModel {
   @belongsTo(() => User, { foreignKey: 'user_id' })
   declare user: BelongsTo<typeof User>
 
-  @belongsTo(() => ChallengeClient, { foreignKey: 'challenge_id' })
+  @belongsTo(() => ChallengeClient, { foreignKey: 'challengeId' })
   declare challenge: BelongsTo<typeof ChallengeClient>
 
   @column.dateTime({ autoCreate: true })

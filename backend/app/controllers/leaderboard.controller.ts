@@ -3,13 +3,13 @@ import TrainingSession from '#models/training_session'
 
 export default class LeaderboardController {
   async index({ request, response }: HttpContext) {
-    const challengeId = request.input('challenge_id')
+    const challengeId = request.input('challengeId')
 
     if (!challengeId) {
-      return response.badRequest({ message: 'challenge_id is required' })
+      return response.badRequest({ message: 'challengeId is required' })
     }
 
-    const sessions = await TrainingSession.query().where('challenge_id', challengeId)
+    const sessions = await TrainingSession.query().where('challengeId', challengeId)
     const leaderboard: Record<
       number,
       { user_id: number; total_duration: number; total_calories: number }
@@ -19,7 +19,7 @@ export default class LeaderboardController {
         leaderboard[s.user_id] = { user_id: s.user_id, total_duration: 0, total_calories: 0 }
       }
       leaderboard[s.user_id].total_duration += s.duration || 0
-      leaderboard[s.user_id].total_calories += s.calories_burned || 0
+      leaderboard[s.user_id].total_calories += s.caloriesBurned || 0
     })
     const sorted = Object.values(leaderboard).sort((a, b) => b.total_duration - a.total_duration)
 

@@ -6,13 +6,13 @@ export default class ChallengeInvitation extends BaseModel {
   declare id: number
 
   @column()
-  declare inviter_id: number
+  declare inviterId: number
 
   @column()
-  declare invitee_id: number
+  declare inviteeId: number
 
   @column()
-  declare challenge_id: number
+  declare challengeId: number
 
   @column()
   declare status: 'pending' | 'accepted' | 'declined'

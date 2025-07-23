@@ -3,11 +3,11 @@ import ChallengeInvitation from '#models/challenge_invitation'
 
 export default class ChallengeInvitationController {
   async store({ request, response, auth }: HttpContext) {
-    const { invitee_id, challenge_id } = request.only(['invitee_id', 'challenge_id'])
+    const { inviteeId, challengeId } = request.only(['inviteeId', 'challengeId'])
     const invite = await ChallengeInvitation.create({
-      inviter_id: auth.user!.id,
-      invitee_id,
-      challenge_id,
+      inviterId: auth.user!.id,
+      inviteeId,
+      challengeId,
       status: 'pending',
     })
 
@@ -22,8 +22,8 @@ export default class ChallengeInvitationController {
     }
 
     const invites = await ChallengeInvitation.query()
-      .where('invitee_id', userId)
-      .orWhere('inviter_id', userId)
+      .where('inviteeId', userId)
+      .orWhere('inviterId', userId)
 
     return response.ok(invites)
   }
@@ -36,7 +36,7 @@ export default class ChallengeInvitationController {
 
     if (!invite) return response.notFound({ message: 'Invitation not found' })
 
-    if (invite.invitee_id !== userId) {
+    if (invite.inviteeId !== userId) {
       return response.forbidden({ message: 'Not your invitation' })
     }
 

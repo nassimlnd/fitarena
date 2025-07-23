@@ -6,10 +6,10 @@ export default class GroupChallenge extends BaseModel {
   declare id: number
 
   @column()
-  declare challenge_id: number
+  declare challengeId: number
 
   @column()
-  declare group_name: string
+  declare goupName: string
 
   @column()
   declare created_by: number
