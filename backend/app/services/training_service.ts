@@ -1,6 +1,12 @@
 import { TrainingSessionRepository } from '../repositories/training_session_repository.js'
 import { ChallengeRepository } from '../repositories/challenge_repository.js'
-import { CreateTrainingSessionDTO, UpdateTrainingSessionDTO, TrainingSessionData, TrainingSessionFilterOptions, TrainingStatsData } from '../types/training_session.dto.js'
+import {
+  CreateTrainingSessionDTO,
+  UpdateTrainingSessionDTO,
+  TrainingSessionData,
+  TrainingSessionFilterOptions,
+  TrainingStatsData,
+} from '../types/training_session.dto.js'
 import { ServiceResponse, ServiceException } from '../types/common_types.js'
 import { DateTime } from 'luxon'
 
@@ -13,7 +19,10 @@ export class TrainingService {
     this.challengeRepository = new ChallengeRepository()
   }
 
-  async createTrainingSession(data: CreateTrainingSessionDTO, userId: number): Promise<ServiceResponse<TrainingSessionData>> {
+  async createTrainingSession(
+    data: CreateTrainingSessionDTO,
+    userId: number
+  ): Promise<ServiceResponse<TrainingSessionData>> {
     try {
       // Validation des données
       this.validateTrainingSessionData(data)
@@ -41,11 +50,18 @@ export class TrainingService {
       if (error instanceof ServiceException) {
         throw error
       }
-      throw new ServiceException('Failed to create training session', 'TRAINING_SESSION_CREATION_FAILED', 500)
+      throw new ServiceException(
+        'Failed to create training session',
+        'TRAINING_SESSION_CREATION_FAILED',
+        500
+      )
     }
   }
 
-  async getTrainingSession(sessionId: number, userId: number): Promise<ServiceResponse<TrainingSessionData>> {
+  async getTrainingSession(
+    sessionId: number,
+    userId: number
+  ): Promise<ServiceResponse<TrainingSessionData>> {
     try {
       const session = await this.trainingRepository.findById(sessionId)
       if (!session) {
@@ -54,7 +70,11 @@ export class TrainingService {
 
       // Vérifier que l'utilisateur peut accéder à cette session
       if (session.userId !== userId) {
-        throw new ServiceException('You are not authorized to view this training session', 'TRAINING_SESSION_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to view this training session',
+          'TRAINING_SESSION_UNAUTHORIZED',
+          403
+        )
       }
 
       return {
@@ -65,11 +85,18 @@ export class TrainingService {
       if (error instanceof ServiceException) {
         throw error
       }
-      throw new ServiceException('Failed to fetch training session', 'TRAINING_SESSION_FETCH_FAILED', 500)
+      throw new ServiceException(
+        'Failed to fetch training session',
+        'TRAINING_SESSION_FETCH_FAILED',
+        500
+      )
     }
   }
 
-  async getUserTrainingSessions(userId: number, filters?: TrainingSessionFilterOptions): Promise<ServiceResponse<TrainingSessionData[]>> {
+  async getUserTrainingSessions(
+    userId: number,
+    filters?: TrainingSessionFilterOptions
+  ): Promise<ServiceResponse<TrainingSessionData[]>> {
     try {
       const userFilters = {
         ...filters,
@@ -80,14 +107,20 @@ export class TrainingService {
 
       return {
         success: true,
-        data: sessions.map(session => this.formatTrainingSessionData(session)),
+        data: sessions.map((session) => this.formatTrainingSessionData(session)),
       }
     } catch (error) {
-      throw new ServiceException('Failed to fetch user training sessions', 'TRAINING_SESSION_FETCH_FAILED', 500)
+      throw new ServiceException(
+        'Failed to fetch user training sessions',
+        'TRAINING_SESSION_FETCH_FAILED',
+        500
+      )
     }
   }
 
-  async getChallengeTrainingSessions(challengeId: number): Promise<ServiceResponse<TrainingSessionData[]>> {
+  async getChallengeTrainingSessions(
+    challengeId: number
+  ): Promise<ServiceResponse<TrainingSessionData[]>> {
     try {
       // Vérifier que le challenge existe
       const challenge = await this.challengeRepository.findById(challengeId)
@@ -99,17 +132,25 @@ export class TrainingService {
 
       return {
         success: true,
-        data: sessions.map(session => this.formatTrainingSessionData(session)),
+        data: sessions.map((session) => this.formatTrainingSessionData(session)),
       }
     } catch (error) {
       if (error instanceof ServiceException) {
         throw error
       }
-      throw new ServiceException('Failed to fetch challenge training sessions', 'TRAINING_SESSION_FETCH_FAILED', 500)
+      throw new ServiceException(
+        'Failed to fetch challenge training sessions',
+        'TRAINING_SESSION_FETCH_FAILED',
+        500
+      )
     }
   }
 
-  async updateTrainingSession(sessionId: number, data: UpdateTrainingSessionDTO, userId: number): Promise<ServiceResponse<TrainingSessionData>> {
+  async updateTrainingSession(
+    sessionId: number,
+    data: UpdateTrainingSessionDTO,
+    userId: number
+  ): Promise<ServiceResponse<TrainingSessionData>> {
     try {
       const session = await this.trainingRepository.findById(sessionId)
       if (!session) {
@@ -118,7 +159,11 @@ export class TrainingService {
 
       // Vérifier l'ownership
       if (session.userId !== userId) {
-        throw new ServiceException('You are not authorized to update this training session', 'TRAINING_SESSION_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to update this training session',
+          'TRAINING_SESSION_UNAUTHORIZED',
+          403
+        )
       }
 
       // Validation des nouvelles données
@@ -131,7 +176,11 @@ export class TrainingService {
 
       const updatedSession = await this.trainingRepository.update(sessionId, data)
       if (!updatedSession) {
-        throw new ServiceException('Failed to update training session', 'TRAINING_SESSION_UPDATE_FAILED', 500)
+        throw new ServiceException(
+          'Failed to update training session',
+          'TRAINING_SESSION_UPDATE_FAILED',
+          500
+        )
       }
 
       return {
@@ -142,11 +191,18 @@ export class TrainingService {
       if (error instanceof ServiceException) {
         throw error
       }
-      throw new ServiceException('Failed to update training session', 'TRAINING_SESSION_UPDATE_FAILED', 500)
+      throw new ServiceException(
+        'Failed to update training session',
+        'TRAINING_SESSION_UPDATE_FAILED',
+        500
+      )
     }
   }
 
-  async deleteTrainingSession(sessionId: number, userId: number): Promise<ServiceResponse<boolean>> {
+  async deleteTrainingSession(
+    sessionId: number,
+    userId: number
+  ): Promise<ServiceResponse<boolean>> {
     try {
       const session = await this.trainingRepository.findById(sessionId)
       if (!session) {
@@ -155,12 +211,20 @@ export class TrainingService {
 
       // Vérifier l'ownership
       if (session.userId !== userId) {
-        throw new ServiceException('You are not authorized to delete this training session', 'TRAINING_SESSION_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to delete this training session',
+          'TRAINING_SESSION_UNAUTHORIZED',
+          403
+        )
       }
 
       const deleted = await this.trainingRepository.delete(sessionId)
       if (!deleted) {
-        throw new ServiceException('Failed to delete training session', 'TRAINING_SESSION_DELETE_FAILED', 500)
+        throw new ServiceException(
+          'Failed to delete training session',
+          'TRAINING_SESSION_DELETE_FAILED',
+          500
+        )
       }
 
       return {
@@ -171,7 +235,11 @@ export class TrainingService {
       if (error instanceof ServiceException) {
         throw error
       }
-      throw new ServiceException('Failed to delete training session', 'TRAINING_SESSION_DELETE_FAILED', 500)
+      throw new ServiceException(
+        'Failed to delete training session',
+        'TRAINING_SESSION_DELETE_FAILED',
+        500
+      )
     }
   }
 
@@ -181,8 +249,10 @@ export class TrainingService {
 
       const trainingStats: TrainingStatsData = {
         ...stats,
-        averageDuration: stats.totalSessions > 0 ? Math.round(stats.totalDuration / stats.totalSessions) : 0,
-        averageCalories: stats.totalSessions > 0 ? Math.round(stats.totalCalories / stats.totalSessions) : 0,
+        averageDuration:
+          stats.totalSessions > 0 ? Math.round(stats.totalDuration / stats.totalSessions) : 0,
+        averageCalories:
+          stats.totalSessions > 0 ? Math.round(stats.totalCalories / stats.totalSessions) : 0,
       }
 
       return {
@@ -190,7 +260,11 @@ export class TrainingService {
         data: trainingStats,
       }
     } catch (error) {
-      throw new ServiceException('Failed to fetch training stats', 'TRAINING_STATS_FETCH_FAILED', 500)
+      throw new ServiceException(
+        'Failed to fetch training stats',
+        'TRAINING_STATS_FETCH_FAILED',
+        500
+      )
     }
   }
 
@@ -200,17 +274,29 @@ export class TrainingService {
     }
 
     if (!data.duration || data.duration <= 0) {
-      throw new ServiceException('Training duration must be greater than 0', 'INVALID_TRAINING_DURATION', 422)
+      throw new ServiceException(
+        'Training duration must be greater than 0',
+        'INVALID_TRAINING_DURATION',
+        422
+      )
     }
 
     if (data.caloriesBurned !== undefined && data.caloriesBurned < 0) {
-      throw new ServiceException('Calories burned cannot be negative', 'INVALID_CALORIES_BURNED', 422)
+      throw new ServiceException(
+        'Calories burned cannot be negative',
+        'INVALID_CALORIES_BURNED',
+        422
+      )
     }
 
     // Vérifier que la date n'est pas dans le futur
     const trainingDate = typeof data.date === 'string' ? DateTime.fromISO(data.date) : data.date
     if (trainingDate > DateTime.now()) {
-      throw new ServiceException('Training date cannot be in the future', 'INVALID_TRAINING_DATE', 422)
+      throw new ServiceException(
+        'Training date cannot be in the future',
+        'INVALID_TRAINING_DATE',
+        422
+      )
     }
   }
 
