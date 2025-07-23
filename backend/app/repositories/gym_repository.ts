@@ -3,13 +3,12 @@ import { BaseRepositoryInterface } from './base_repository.js'
 import { CreateGymDTO, UpdateGymDTO, GymFilterOptions } from '../types/gym.dto.js'
 import { FilterOptions, PaginationOptions } from '../types/common_types.js'
 
-type CreateGymData = CreateGymDTO & { 
+type CreateGymData = CreateGymDTO & {
   ownerId: number
   status: 'pending' | 'approved' | 'rejected'
 }
 
 export class GymRepository implements BaseRepositoryInterface<Gym, CreateGymData, UpdateGymDTO> {
-
   async create(data: CreateGymData): Promise<Gym> {
     return await Gym.create(data)
   }
@@ -83,10 +82,7 @@ export class GymRepository implements BaseRepositoryInterface<Gym, CreateGymData
     return await query
   }
 
-  async updateStatus(
-    id: number,
-    status: 'pending' | 'approved' | 'rejected'
-  ): Promise<Gym | null> {
+  async updateStatus(id: number, status: 'pending' | 'approved' | 'rejected'): Promise<Gym | null> {
     const gym = await this.findById(id)
     if (!gym) return null
 
