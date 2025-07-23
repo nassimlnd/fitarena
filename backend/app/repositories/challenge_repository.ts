@@ -1,6 +1,10 @@
 import Challenge from '#models/challenge'
 import { BaseRepositoryInterface } from './base_repository.js'
-import { CreateChallengeDTO, UpdateChallengeDTO, ChallengeFilterOptions } from '../types/challenge.dto.js'
+import {
+  CreateChallengeDTO,
+  UpdateChallengeDTO,
+  ChallengeFilterOptions,
+} from '../types/challenge.dto.js'
 import { FilterOptions, PaginationOptions } from '../types/common_types.js'
 
 type CreateChallengeData = CreateChallengeDTO & {
@@ -9,8 +13,9 @@ type CreateChallengeData = CreateChallengeDTO & {
   creatorType: 'user' | 'gym'
 }
 
-export class ChallengeRepository implements BaseRepositoryInterface<Challenge, CreateChallengeData, UpdateChallengeDTO> {
-
+export class ChallengeRepository
+  implements BaseRepositoryInterface<Challenge, CreateChallengeData, UpdateChallengeDTO>
+{
   async create(data: CreateChallengeData): Promise<Challenge> {
     return await Challenge.create(data)
   }
@@ -59,14 +64,12 @@ export class ChallengeRepository implements BaseRepositoryInterface<Challenge, C
   }
 
   async findUserChallenges(isPublic: boolean = true): Promise<Challenge[]> {
-    return await Challenge.query()
-      .where('creatorType', 'user')
-      .where('isPublic', isPublic)
+    return await Challenge.query().where('creatorType', 'user').where('isPublic', isPublic)
   }
 
   async findGymChallenges(gymId?: number): Promise<Challenge[]> {
     let query = Challenge.query().where('creatorType', 'gym')
-    
+
     if (gymId) {
       query = query.where('gymId', gymId)
     }

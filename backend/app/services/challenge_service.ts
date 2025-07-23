@@ -1,6 +1,11 @@
 import { ChallengeRepository } from '../repositories/challenge_repository.js'
 import { GymRepository } from '../repositories/gym_repository.js'
-import { CreateChallengeDTO, UpdateChallengeDTO, ChallengeData, ChallengeFilterOptions } from '../types/challenge.dto.js'
+import {
+  CreateChallengeDTO,
+  UpdateChallengeDTO,
+  ChallengeData,
+  ChallengeFilterOptions,
+} from '../types/challenge.dto.js'
 import { ServiceResponse, ServiceException } from '../types/common_types.js'
 
 export class ChallengeService {
@@ -12,7 +17,10 @@ export class ChallengeService {
     this.gymRepository = new GymRepository()
   }
 
-  async createUserChallenge(data: CreateChallengeDTO, userId: number): Promise<ServiceResponse<ChallengeData>> {
+  async createUserChallenge(
+    data: CreateChallengeDTO,
+    userId: number
+  ): Promise<ServiceResponse<ChallengeData>> {
     try {
       // Valider les données spécifiques aux user challenges
       this.validateUserChallengeData(data)
@@ -34,21 +42,36 @@ export class ChallengeService {
       if (error instanceof ServiceException) {
         throw error
       }
-      throw new ServiceException('Failed to create user challenge', 'CHALLENGE_CREATION_FAILED', 500)
+      throw new ServiceException(
+        'Failed to create user challenge',
+        'CHALLENGE_CREATION_FAILED',
+        500
+      )
     }
   }
 
-  async createGymChallenge(data: CreateChallengeDTO, userId: number): Promise<ServiceResponse<ChallengeData>> {
+  async createGymChallenge(
+    data: CreateChallengeDTO,
+    userId: number
+  ): Promise<ServiceResponse<ChallengeData>> {
     try {
       // Vérifier que l'utilisateur possède une salle
       const gym = await this.gymRepository.findByOwner(userId)
       if (!gym) {
-        throw new ServiceException('You must own a gym to create gym challenges', 'GYM_NOT_OWNED', 403)
+        throw new ServiceException(
+          'You must own a gym to create gym challenges',
+          'GYM_NOT_OWNED',
+          403
+        )
       }
 
       // Vérifier que la salle est approuvée
       if (gym.status !== 'approved') {
-        throw new ServiceException('Your gym must be approved to create challenges', 'GYM_NOT_APPROVED', 403)
+        throw new ServiceException(
+          'Your gym must be approved to create challenges',
+          'GYM_NOT_APPROVED',
+          403
+        )
       }
 
       // Valider les données spécifiques aux gym challenges
@@ -73,14 +96,20 @@ export class ChallengeService {
       }
 
       if (error.code === 'ER_DUP_ENTRY') {
-        throw new ServiceException('A challenge with this name already exists for your gym', 'CHALLENGE_DUPLICATE', 409)
+        throw new ServiceException(
+          'A challenge with this name already exists for your gym',
+          'CHALLENGE_DUPLICATE',
+          409
+        )
       }
 
       throw new ServiceException('Failed to create gym challenge', 'CHALLENGE_CREATION_FAILED', 500)
     }
   }
 
-  async getUserChallenges(filters?: ChallengeFilterOptions): Promise<ServiceResponse<ChallengeData[]>> {
+  async getUserChallenges(
+    filters?: ChallengeFilterOptions
+  ): Promise<ServiceResponse<ChallengeData[]>> {
     try {
       // Forcer les filtres pour les user challenges publics
       const userFilters = {
@@ -93,7 +122,7 @@ export class ChallengeService {
 
       return {
         success: true,
-        data: challenges.map(challenge => this.formatChallengeData(challenge)),
+        data: challenges.map((challenge) => this.formatChallengeData(challenge)),
       }
     } catch (error) {
       throw new ServiceException('Failed to fetch user challenges', 'CHALLENGE_FETCH_FAILED', 500)
@@ -106,7 +135,7 @@ export class ChallengeService {
 
       return {
         success: true,
-        data: challenges.map(challenge => this.formatChallengeData(challenge)),
+        data: challenges.map((challenge) => this.formatChallengeData(challenge)),
       }
     } catch (error) {
       throw new ServiceException('Failed to fetch gym challenges', 'CHALLENGE_FETCH_FAILED', 500)
@@ -147,7 +176,11 @@ export class ChallengeService {
       // Vérifier l'ownership selon le type de challenge
       const hasOwnership = await this.validateChallengeOwnership(challengeId, userId, userRole)
       if (!hasOwnership) {
-        throw new ServiceException('You are not authorized to update this challenge', 'CHALLENGE_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to update this challenge',
+          'CHALLENGE_UNAUTHORIZED',
+          403
+        )
       }
 
       const updatedChallenge = await this.challengeRepository.update(challengeId, data)
@@ -167,7 +200,11 @@ export class ChallengeService {
     }
   }
 
-  async deleteChallenge(challengeId: number, userId: number, userRole: string): Promise<ServiceResponse<boolean>> {
+  async deleteChallenge(
+    challengeId: number,
+    userId: number,
+    userRole: string
+  ): Promise<ServiceResponse<boolean>> {
     try {
       const challenge = await this.challengeRepository.findById(challengeId)
       if (!challenge) {
@@ -177,7 +214,11 @@ export class ChallengeService {
       // Vérifier l'ownership
       const hasOwnership = await this.validateChallengeOwnership(challengeId, userId, userRole)
       if (!hasOwnership) {
-        throw new ServiceException('You are not authorized to delete this challenge', 'CHALLENGE_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to delete this challenge',
+          'CHALLENGE_UNAUTHORIZED',
+          403
+        )
       }
 
       const deleted = await this.challengeRepository.delete(challengeId)
@@ -197,7 +238,11 @@ export class ChallengeService {
     }
   }
 
-  async validateChallengeOwnership(challengeId: number, userId: number, userRole: string): Promise<boolean> {
+  async validateChallengeOwnership(
+    challengeId: number,
+    userId: number,
+    userRole: string
+  ): Promise<boolean> {
     try {
       const challenge = await this.challengeRepository.findById(challengeId)
       if (!challenge) return false
@@ -207,7 +252,7 @@ export class ChallengeService {
       } else {
         // Pour les gym challenges, vérifier que l'utilisateur possède la salle
         if (userRole !== 'gymOwner') return false
-        
+
         const gym = await this.gymRepository.findById(challenge.gymId!)
         return gym?.ownerId === userId
       }
@@ -218,29 +263,53 @@ export class ChallengeService {
 
   private validateUserChallengeData(data: CreateChallengeDTO): void {
     if (!data.name || data.name.length < 3) {
-      throw new ServiceException('Challenge name must be at least 3 characters', 'INVALID_CHALLENGE_NAME', 422)
+      throw new ServiceException(
+        'Challenge name must be at least 3 characters',
+        'INVALID_CHALLENGE_NAME',
+        422
+      )
     }
 
     if (!data.description || data.description.length < 10) {
-      throw new ServiceException('Challenge description must be at least 10 characters', 'INVALID_CHALLENGE_DESCRIPTION', 422)
+      throw new ServiceException(
+        'Challenge description must be at least 10 characters',
+        'INVALID_CHALLENGE_DESCRIPTION',
+        422
+      )
     }
 
     if (!data.objectives || data.objectives.length < 5) {
-      throw new ServiceException('Challenge objectives must be at least 5 characters', 'INVALID_CHALLENGE_OBJECTIVES', 422)
+      throw new ServiceException(
+        'Challenge objectives must be at least 5 characters',
+        'INVALID_CHALLENGE_OBJECTIVES',
+        422
+      )
     }
 
     if (!data.duration || data.duration < 1) {
-      throw new ServiceException('Challenge duration must be at least 1 day', 'INVALID_CHALLENGE_DURATION', 422)
+      throw new ServiceException(
+        'Challenge duration must be at least 1 day',
+        'INVALID_CHALLENGE_DURATION',
+        422
+      )
     }
   }
 
   private validateGymChallengeData(data: CreateChallengeDTO): void {
     if (!data.name || data.name.length < 2) {
-      throw new ServiceException('Challenge name must be at least 2 characters', 'INVALID_CHALLENGE_NAME', 422)
+      throw new ServiceException(
+        'Challenge name must be at least 2 characters',
+        'INVALID_CHALLENGE_NAME',
+        422
+      )
     }
 
     if (data.score === undefined || data.score < 0) {
-      throw new ServiceException('Challenge score must be provided and non-negative', 'INVALID_CHALLENGE_SCORE', 422)
+      throw new ServiceException(
+        'Challenge score must be provided and non-negative',
+        'INVALID_CHALLENGE_SCORE',
+        422
+      )
     }
   }
 

@@ -16,8 +16,9 @@ type UpdateUserData = {
   role?: 'admin' | 'gymOwner' | 'user'
 }
 
-export class UserRepository implements BaseRepositoryInterface<User, CreateUserData, UpdateUserData> {
-
+export class UserRepository
+  implements BaseRepositoryInterface<User, CreateUserData, UpdateUserData>
+{
   async create(data: CreateUserData): Promise<User> {
     return await User.create(data)
   }
@@ -74,18 +75,12 @@ export class UserRepository implements BaseRepositoryInterface<User, CreateUserD
   }
 
   async hasGym(userId: number): Promise<boolean> {
-    const user = await User.query()
-      .where('id', userId)
-      .preload('gym')
-      .first()
+    const user = await User.query().where('id', userId).preload('gym').first()
 
     return user?.gym !== null
   }
 
   async getUserWithGym(userId: number): Promise<User | null> {
-    return await User.query()
-      .where('id', userId)
-      .preload('gym')
-      .first()
+    return await User.query().where('id', userId).preload('gym').first()
   }
 }

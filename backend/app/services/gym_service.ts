@@ -35,7 +35,11 @@ export class GymService {
 
       // Gestion des erreurs de base de données
       if (error.code === 'ER_DUP_ENTRY') {
-        throw new ServiceException('A gym with this information already exists', 'GYM_DUPLICATE', 409)
+        throw new ServiceException(
+          'A gym with this information already exists',
+          'GYM_DUPLICATE',
+          409
+        )
       }
 
       throw new ServiceException('Failed to create gym', 'GYM_CREATION_FAILED', 500)
@@ -47,19 +51,21 @@ export class GymService {
       const gyms = await this.gymRepository.findApprovedGyms()
       return {
         success: true,
-        data: gyms.map(gym => this.formatGymData(gym)),
+        data: gyms.map((gym) => this.formatGymData(gym)),
       }
     } catch (error) {
       throw new ServiceException('Failed to fetch approved gyms', 'GYM_FETCH_FAILED', 500)
     }
   }
 
-  async getGymsByStatus(status: 'pending' | 'approved' | 'rejected'): Promise<ServiceResponse<GymData[]>> {
+  async getGymsByStatus(
+    status: 'pending' | 'approved' | 'rejected'
+  ): Promise<ServiceResponse<GymData[]>> {
     try {
       const gyms = await this.gymRepository.findByStatus(status)
       return {
         success: true,
-        data: gyms.map(gym => this.formatGymData(gym)),
+        data: gyms.map((gym) => this.formatGymData(gym)),
       }
     } catch (error) {
       throw new ServiceException(`Failed to fetch ${status} gyms`, 'GYM_FETCH_FAILED', 500)
@@ -71,7 +77,7 @@ export class GymService {
       const gyms = await this.gymRepository.findPendingGyms()
       return {
         success: true,
-        data: gyms.map(gym => this.formatGymData(gym)),
+        data: gyms.map((gym) => this.formatGymData(gym)),
       }
     } catch (error) {
       throw new ServiceException('Failed to fetch pending gyms', 'GYM_FETCH_FAILED', 500)
@@ -134,7 +140,11 @@ export class GymService {
     }
   }
 
-  async updateGym(gymId: number, data: UpdateGymDTO, ownerId: number): Promise<ServiceResponse<GymData>> {
+  async updateGym(
+    gymId: number,
+    data: UpdateGymDTO,
+    ownerId: number
+  ): Promise<ServiceResponse<GymData>> {
     try {
       const gym = await this.gymRepository.findById(gymId)
       if (!gym) {
@@ -143,7 +153,11 @@ export class GymService {
 
       // Vérifier que l'utilisateur est bien le propriétaire
       if (gym.ownerId !== ownerId) {
-        throw new ServiceException('You are not authorized to update this gym', 'GYM_UNAUTHORIZED', 403)
+        throw new ServiceException(
+          'You are not authorized to update this gym',
+          'GYM_UNAUTHORIZED',
+          403
+        )
       }
 
       const updatedGym = await this.gymRepository.update(gymId, data)
