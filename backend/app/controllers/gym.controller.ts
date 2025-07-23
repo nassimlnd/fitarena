@@ -1,48 +1,57 @@
-import Gym from '#models/gym'
 import type { HttpContext } from '@adonisjs/core/http'
+import { createGymValidator, updateGymValidator } from '#validators/gym'
+import { GymService } from '../services/gym_service.js'
+import { BaseController } from './base_controller.js'
 
-export default class GymController {
+export default class GymController extends BaseController {
+  private gymService = new GymService()
+
   async store({ request, response, auth }: HttpContext) {
-    const userId = auth.user!.id
-    const gyms = await Gym.findBy('owner_id', userId)
+    try {
+      const user = this.getUserFromAuth(auth)
+      const payload = await request.validateUsing(createGymValidator)
 
-    if (gyms) {
-      return response.conflict({ message: 'You already own a gym' })
+      const result = await this.gymService.createGym(payload, user.id)
+
+      if (result.success) {
+        return response.created(result.data)
+      }
+
+      return response.badRequest({ message: result.error })
+    } catch (error) {
+      return this.handleServiceError(error, response)
     }
-
-    const gymData = {
-      ...request.only(['name', 'contact', 'description']),
-      ownerId: userId,
-    }
-
-    const gym = await Gym.create(gymData)
-
-    return response.created(gym)
   }
 
   async list({ response }: HttpContext) {
-    const gyms = await Gym.all()
+    try {
+      const result = await this.gymService.getApprovedGyms()
 
-    return response.ok(gyms)
+      if (result.success) {
+        return response.ok(result.data)
+      }
+
+      return response.badRequest({ message: result.error })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
   }
 
   async update({ params, request, response, auth }: HttpContext) {
-    const userId = auth.user!.id
-
     try {
-      const gym = await Gym.findOrFail(params.id)
+      const user = this.getUserFromAuth(auth)
+      const gymId = this.getValidId(params.id, 'gym ID')
+      const payload = await request.validateUsing(updateGymValidator)
 
-      if (gym.ownerId !== userId) {
-        return response.forbidden({ message: 'You are not authorized to update this gym' })
+      const result = await this.gymService.updateGym(gymId, payload, user.id)
+
+      if (result.success) {
+        return response.ok(result.data)
       }
 
-      gym.merge(request.only(['name', 'contact', 'description']))
-
-      await gym.save()
-
-      return response.ok(gym)
+      return response.badRequest({ message: result.error })
     } catch (error) {
-      return response.notFound({ message: 'Gym not found' })
+      return this.handleServiceError(error, response)
     }
   }
 }

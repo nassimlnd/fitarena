@@ -1,41 +1,57 @@
-import Challenge from '#models/challenge'
-import Gym from '#models/gym'
 import type { HttpContext } from '@adonisjs/core/http'
+import { ChallengeService } from '../services/challenge_service.js'
+import { BaseController } from './base_controller.js'
 
-export default class ChallengeController {
+export default class ChallengeController extends BaseController {
+  private challengeService = new ChallengeService()
+
   async store({ request, response, auth }: HttpContext) {
-    const userId = auth.user!.id
-    const gym = await Gym.findBy('owner_id', userId)
+    try {
+      const user = this.getUserFromAuth(auth)
+      const payload = request.only(['name', 'score', 'description', 'objectives', 'type'])
 
-    if (!gym) {
-      return response.notFound({ message: 'Gym not found for the authenticated user.' })
+      const result = await this.challengeService.createGymChallenge(payload, user.id)
+
+      if (result.success) {
+        return response.created(result.data)
+      }
+
+      return response.badRequest({ message: result.error })
+    } catch (error) {
+      return this.handleServiceError(error, response)
     }
-
-    const challenge = await Challenge.create({
-      ...request.only(['name', 'score']),
-      gymId: gym.id,
-    })
-
-    return response.created(challenge)
   }
 
   async getByGymId({ params, response }: HttpContext) {
-    const { id } = params
+    try {
+      const gymId = this.getValidId(params.id, 'gym ID')
 
-    const challenges = await Challenge.findManyBy('gym_id', id)
+      const result = await this.challengeService.getGymChallenges(gymId)
 
-    return response.ok(challenges)
+      if (result.success) {
+        return response.ok(result.data)
+      }
+
+      return response.badRequest({ message: result.error })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
   }
 
-  async claim({ params, response, auth }: HttpContext) {
-    const { id } = params
-    const userId = auth.user
+  async claim({ params, response }: HttpContext) {
+    try {
+      const challengeId = this.getValidId(params.id, 'challenge ID')
 
-    const challenge = await Challenge.findOrFail(id)
+      const result = await this.challengeService.getChallengeById(challengeId)
 
-    // @todo add user score
-    // user.score += challenge.score;
+      if (result.success) {
+        // @todo: Implement user score logic in a dedicated service
+        return response.ok({ message: 'Challenge claimed successfully', challenge: result.data })
+      }
 
-    return response.ok({ message: 'Challenge claimed successfully', challenge })
+      return response.badRequest({ message: result.error })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
   }
 }
