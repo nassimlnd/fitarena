@@ -6,13 +6,13 @@ export default class ChallengeInvitations extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('inviterId').unsigned().references('id').inTable('users').onDelete('CASCADE')
-      table.integer('inviteeId').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.integer('inviter_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
+      table.integer('invitee_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table
-        .integer('challengeId')
+        .integer('challenge_id')
         .unsigned()
         .references('id')
-        .inTable('challenge_clients')
+        .inTable('challenges')
         .onDelete('CASCADE')
       table.enum('status', ['pending', 'accepted', 'declined']).defaultTo('pending')
       table.timestamps(true)

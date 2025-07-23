@@ -1,9 +1,13 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasOne, hasMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
+import type { HasOne, HasMany } from '@adonisjs/lucid/types/relations'
+import Gym from './gym.js'
+import Challenge from './challenge.js'
+import TrainingSession from './training_session.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -31,6 +35,22 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+
+  // Relations
+  @hasOne(() => Gym, {
+    foreignKey: 'ownerId',
+  })
+  declare gym: HasOne<typeof Gym>
+
+  @hasMany(() => Challenge, {
+    foreignKey: 'creatorId',
+  })
+  declare createdChallenges: HasMany<typeof Challenge>
+
+  @hasMany(() => TrainingSession, {
+    foreignKey: 'userId',
+  })
+  declare trainingSessions: HasMany<typeof TrainingSession>
 
   static accessTokens = DbAccessTokensProvider.forModel(User)
 }

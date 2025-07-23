@@ -7,12 +7,12 @@ export default class GroupChallenges extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table
-        .integer('challengeId')
+        .integer('challenge_id')
         .unsigned()
         .references('id')
-        .inTable('challenge_clients')
+        .inTable('challenges')
         .onDelete('CASCADE')
-      table.string('goupName').notNullable()
+      table.string('group_name').notNullable()
       table.integer('created_by').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.timestamps(true)
     })
