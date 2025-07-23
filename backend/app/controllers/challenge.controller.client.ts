@@ -5,13 +5,13 @@ export default class ChallengeControllerClient {
   async index({ request, response }: HttpContext) {
     const { difficulty, type, min_duration, max_duration } = request.qs()
     const query = ChallengeClient.query().where('is_public', true)
-  
+
     if (difficulty) query.where('difficulty', difficulty)
 
     if (type) query.where('type', type)
 
     if (min_duration) query.where('duration', '>=', Number(min_duration))
-  
+
     if (max_duration) query.where('duration', '<=', Number(max_duration))
 
     const challenges = await query
