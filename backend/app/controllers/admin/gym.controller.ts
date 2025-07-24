@@ -1,80 +1,86 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import Gym from '#models/gym'
+import { GymService } from '../../services/gym_service.js'
+import { BaseController } from '../base_controller.js'
 
-export default class AdminGymController {
+export default class AdminGymController extends BaseController {
+  private gymService: GymService
+
+  constructor() {
+    super()
+    this.gymService = new GymService()
+  }
   async index({ request, response }: HttpContext) {
-    const status = request.input('status')
-    let query = Gym.query().preload('owner')
+    try {
+      const status = request.input('status')
+      let result
 
-    if (status) {
-      query = query.where('status', status)
+      if (status === 'pending') {
+        result = await this.gymService.getPendingGyms()
+      } else if (status === 'approved') {
+        result = await this.gymService.getApprovedGyms()
+      } else {
+        // Si pas de status ou autre status, on retourne les gyms approuvées par défaut
+        result = await this.gymService.getApprovedGyms()
+      }
+
+      return response.ok(result.data)
+    } catch (error) {
+      return this.handleServiceError(error, response)
     }
-
-    const gyms = await query
-    return response.ok(gyms)
   }
 
   async pending({ response }: HttpContext) {
-    const gyms = await Gym.query().where('status', 'pending').preload('owner')
-    return response.ok(gyms)
+    try {
+      const result = await this.gymService.getPendingGyms()
+      return response.ok(result.data)
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
   }
 
   async show({ params, response }: HttpContext) {
     try {
-      const gym = await Gym.query().where('id', params.id).preload('owner').firstOrFail()
-      return response.ok(gym)
+      const id = this.getValidId(params.id)
+      const result = await this.gymService.getGymById(id)
+      return response.ok(result.data)
     } catch (error) {
-      return response.notFound({ message: 'Gym not found' })
+      return this.handleServiceError(error, response)
     }
   }
 
   async approve({ params, response }: HttpContext) {
     try {
-      const gym = await Gym.findOrFail(params.id)
-
-      if (gym.status === 'approved') {
-        return response.conflict({ message: 'Gym is already approved' })
-      }
-
-      gym.status = 'approved'
-      await gym.save()
-
+      const id = this.getValidId(params.id)
+      const result = await this.gymService.approveGym(id)
       return response.ok({
         message: 'Gym approved successfully',
-        gym: gym,
+        gym: result.data,
       })
     } catch (error) {
-      return response.notFound({ message: 'Gym not found' })
+      return this.handleServiceError(error, response)
     }
   }
 
   async reject({ params, response }: HttpContext) {
     try {
-      const gym = await Gym.findOrFail(params.id)
-
-      if (gym.status === 'rejected') {
-        return response.conflict({ message: 'Gym is already rejected' })
-      }
-
-      gym.status = 'rejected'
-      await gym.save()
-
+      const id = this.getValidId(params.id)
+      const result = await this.gymService.rejectGym(id)
       return response.ok({
         message: 'Gym rejected successfully',
-        gym: gym,
+        gym: result.data,
       })
     } catch (error) {
-      return response.notFound({ message: 'Gym not found' })
+      return this.handleServiceError(error, response)
     }
   }
 
   async destroy({ params, response }: HttpContext) {
     try {
-      const gym = await Gym.findOrFail(params.id)
-      await gym.delete()
+      const id = this.getValidId(params.id)
+      await this.gymService.deleteGym(id)
       return response.noContent()
     } catch (error) {
-      return response.notFound({ message: 'Gym not found' })
+      return this.handleServiceError(error, response)
     }
   }
 }

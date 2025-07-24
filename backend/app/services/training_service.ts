@@ -1,5 +1,6 @@
 import { TrainingSessionRepository } from '../repositories/training_session_repository.js'
 import { ChallengeRepository } from '../repositories/challenge_repository.js'
+import { AchievementService } from './achievement_service.js'
 import {
   CreateTrainingSessionDTO,
   UpdateTrainingSessionDTO,
@@ -13,10 +14,12 @@ import { DateTime } from 'luxon'
 export class TrainingService {
   private trainingRepository: TrainingSessionRepository
   private challengeRepository: ChallengeRepository
+  private achievementService: AchievementService
 
   constructor() {
     this.trainingRepository = new TrainingSessionRepository()
     this.challengeRepository = new ChallengeRepository()
+    this.achievementService = new AchievementService()
   }
 
   async createTrainingSession(
@@ -41,6 +44,19 @@ export class TrainingService {
       }
 
       const session = await this.trainingRepository.create(sessionData)
+
+      // Déclencher les événements de gamification
+      try {
+        await this.achievementService.processUserAction(userId, 'training_completed', {
+          duration: data.duration,
+          caloriesBurned: data.caloriesBurned || 0,
+          challengeId: data.challengeId,
+          sessionId: session.id,
+        })
+      } catch (gamificationError) {
+        // Ne pas faire échouer la création de session si la gamification échoue
+        console.error('Gamification processing failed:', gamificationError)
+      }
 
       return {
         success: true,

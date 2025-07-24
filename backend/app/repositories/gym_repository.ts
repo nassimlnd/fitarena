@@ -90,4 +90,13 @@ export class GymRepository implements BaseRepositoryInterface<Gym, CreateGymData
     await gym.save()
     return gym
   }
+
+  async updateScore(id: number, newScore: number): Promise<Gym | null> {
+    const gym = await Gym.find(id)
+    if (!gym) return null
+
+    gym.totalScore = newScore
+    await gym.save()
+    return gym
+  }
 }

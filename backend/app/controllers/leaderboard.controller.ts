@@ -1,28 +1,43 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import TrainingSession from '#models/training_session'
+import { LeaderboardService } from '../services/leaderboard_service.js'
+import { BaseController } from './base_controller.js'
 
-export default class LeaderboardController {
+export default class LeaderboardController extends BaseController {
+  private leaderboardService = new LeaderboardService()
+
+  /**
+   * Classement des utilisateurs les plus actifs (selon cahier des charges ligne 98)
+   */
   async index({ request, response }: HttpContext) {
-    const challengeId = request.input('challengeId')
+    try {
+      const limit = Number(request.qs().limit) || 50
+      const result = await this.leaderboardService.getActivityLeaderboard(limit)
 
-    if (!challengeId) {
-      return response.badRequest({ message: 'challengeId is required' })
-    }
-
-    const sessions = await TrainingSession.query().where('challengeId', challengeId)
-    const leaderboard: Record<
-      number,
-      { userId: number; total_duration: number; total_calories: number }
-    > = {}
-    sessions.forEach((s) => {
-      if (!leaderboard[s.userId]) {
-        leaderboard[s.userId] = { userId: s.userId, total_duration: 0, total_calories: 0 }
+      if (result.success) {
+        return response.ok(result.data)
       }
-      leaderboard[s.userId].total_duration += s.duration || 0
-      leaderboard[s.userId].total_calories += s.caloriesBurned || 0
-    })
-    const sorted = Object.values(leaderboard).sort((a, b) => b.total_duration - a.total_duration)
 
-    return response.ok(sorted)
+      return response.badRequest({ message: result.error })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
+  }
+
+  /**
+   * Position de l'utilisateur connecté dans le classement
+   */
+  async myRank({ response, auth }: HttpContext) {
+    try {
+      const user = this.getUserFromAuth(auth)
+      const result = await this.leaderboardService.getUserRank(user.id)
+
+      if (result.success) {
+        return response.ok(result.data)
+      }
+
+      return response.badRequest({ message: result.error })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
   }
 }

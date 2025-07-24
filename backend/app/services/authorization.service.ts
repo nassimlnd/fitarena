@@ -3,7 +3,7 @@ import { ChallengeRepository } from '../repositories/challenge_repository.js'
 import { AuthContext, OwnershipValidation, PermissionCheck } from '../types/auth.dto.js'
 import { ServiceException } from '../types/common_types.js'
 
-export class AuthService {
+export class AuthorizationService {
   private gymRepository: GymRepository
   private challengeRepository: ChallengeRepository
 

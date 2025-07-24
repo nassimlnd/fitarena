@@ -1,9 +1,12 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { ChallengeService } from '../services/challenge_service.js'
+import { ChallengeParticipationService } from '../services/challenge_participation.service.js'
 import { BaseController } from './base_controller.js'
+import { claimChallengeValidator } from '../validators/challenge_participation.js'
 
 export default class ChallengeController extends BaseController {
   private challengeService = new ChallengeService()
+  private participationService = new ChallengeParticipationService()
 
   async store({ request, response, auth }: HttpContext) {
     try {
@@ -38,18 +41,66 @@ export default class ChallengeController extends BaseController {
     }
   }
 
-  async claim({ params, response }: HttpContext) {
+  async claim({ params, request, response, auth }: HttpContext) {
     try {
       const challengeId = this.getValidId(params.id, 'challenge ID')
+      const user = this.getUserFromAuth(auth)
+      const { notes, completedAt } = await request.validateUsing(claimChallengeValidator)
 
-      const result = await this.challengeService.getChallengeById(challengeId)
+      const result = await this.participationService.claimChallenge(user.id, challengeId, {
+        notes,
+        completedAt: completedAt?.toISOString(),
+      })
 
-      if (result.success) {
-        // @todo: Implement user score logic in a dedicated service
-        return response.ok({ message: 'Challenge claimed successfully', challenge: result.data })
-      }
+      return response.ok({
+        message: 'Challenge claimed successfully',
+        participation: result.data,
+      })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
+  }
 
-      return response.badRequest({ message: result.error })
+  async start({ params, response, auth }: HttpContext) {
+    try {
+      const challengeId = this.getValidId(params.id, 'challenge ID')
+      const user = this.getUserFromAuth(auth)
+
+      const result = await this.participationService.startChallenge(user.id, challengeId)
+
+      return response.created({
+        message: 'Challenge started successfully',
+        participation: result.data,
+      })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
+  }
+
+  async myParticipations({ request, response, auth }: HttpContext) {
+    try {
+      const user = this.getUserFromAuth(auth)
+      const { status } = request.qs()
+
+      const result = await this.participationService.getUserParticipations(user.id, status)
+
+      return response.ok({
+        data: result.data,
+      })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
+  }
+
+  async myStats({ response, auth }: HttpContext) {
+    try {
+      const user = this.getUserFromAuth(auth)
+
+      const result = await this.participationService.getUserChallengeStats(user.id)
+
+      return response.ok({
+        stats: result.data,
+      })
     } catch (error) {
       return this.handleServiceError(error, response)
     }

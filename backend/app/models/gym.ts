@@ -23,6 +23,30 @@ export default class Gym extends BaseModel {
   declare description: string | null
 
   @column()
+  declare address: string | null
+
+  @column()
+  declare detailedDescription: string | null
+
+  @column({
+    prepare: (value: string[]) => JSON.stringify(value),
+  })
+  declare facilities: string[]
+
+  @column({
+    prepare: (value: string[]) => JSON.stringify(value),
+  })
+  declare equipment: string[]
+
+  @column({
+    prepare: (value: string[]) => JSON.stringify(value),
+  })
+  declare activityTypes: string[]
+
+  @column()
+  declare totalScore: number
+
+  @column()
   declare ownerId: number
 
   @column()

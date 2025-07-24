@@ -224,12 +224,40 @@ export class GymService {
     }
   }
 
+  async incrementGymScore(gymId: number, points: number): Promise<ServiceResponse<boolean>> {
+    try {
+      const gym = await this.gymRepository.findById(gymId)
+      if (!gym) {
+        throw new ServiceException('Gym not found', 'GYM_NOT_FOUND', 404)
+      }
+
+      const newScore = (gym.totalScore || 0) + points
+      await this.gymRepository.updateScore(gymId, newScore)
+
+      return {
+        success: true,
+        data: true,
+      }
+    } catch (error) {
+      if (error instanceof ServiceException) {
+        throw error
+      }
+      throw new ServiceException('Failed to update gym score', 'GYM_SCORE_UPDATE_FAILED', 500)
+    }
+  }
+
   private formatGymData(gym: any): GymData {
     return {
       id: gym.id,
       name: gym.name,
       contact: gym.contact,
       description: gym.description,
+      address: gym.address,
+      detailedDescription: gym.detailedDescription,
+      facilities: gym.facilities || [],
+      equipment: gym.equipment || [],
+      activityTypes: gym.activityTypes || [],
+      totalScore: gym.totalScore || 0,
       ownerId: gym.ownerId,
       status: gym.status,
       createdAt: gym.createdAt.toISO(),
