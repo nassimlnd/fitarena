@@ -1,43 +1,45 @@
-import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 import { loginValidator, registerValidator } from '#validators/auth'
+import { AuthService } from '../services/auth.service.js'
+import { BaseController } from './base_controller.js'
 
-export default class AuthController {
-  async login({ request, auth }: HttpContext) {
-    const { email, password } = await request.validateUsing(loginValidator)
-    const user = await User.verifyCredentials(email, password)
+export default class AuthController extends BaseController {
+  private authService: AuthService
 
-    const accessToken = await auth.use('api').createToken(user, ['*'], {
-      expiresIn: '1 hour',
-    })
+  constructor() {
+    super()
+    this.authService = new AuthService()
+  }
+  async login({ request, auth, response }: HttpContext) {
+    try {
+      const credentials = await request.validateUsing(loginValidator)
+      const result = await this.authService.login(credentials)
 
-    return {
-      accessToken: accessToken.value?.release(),
+      if (!result.data?.user) {
+        throw new Error('User data not found')
+      }
+
+      const accessToken = await auth.use('api').createToken(result.data.user, ['*'], {
+        expiresIn: '1 hour',
+      })
+
+      return response.ok({
+        accessToken: accessToken.value?.release(),
+        user: result.data.user,
+      })
+    } catch (error) {
+      return this.handleServiceError(error, response)
     }
   }
 
   async register({ request, response }: HttpContext) {
-    const {
-      fullName,
-      email,
-      password,
-      role = 'user',
-    } = await request.validateUsing(registerValidator)
-
     try {
-      const user = await User.create({
-        fullName,
-        email,
-        password,
-        role,
-      })
+      const payload = await request.validateUsing(registerValidator)
+      const result = await this.authService.register(payload)
 
-      return response.created(user)
+      return response.created(result.data)
     } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY' && error.sqlMessage?.includes('users_email_unique')) {
-        return response.conflict({ message: 'Email already exists' })
-      }
-      throw error
+      return this.handleServiceError(error, response)
     }
   }
 }

@@ -111,11 +111,11 @@ export class TrainingSessionRepository
     }
 
     if (filters.minCalories) {
-      query = query.where('caloriesBurned', '>=', filters.minCalories)
+      query = query.where('calories_burned', '>=', filters.minCalories)
     }
 
     if (filters.maxCalories) {
-      query = query.where('caloriesBurned', '<=', filters.maxCalories)
+      query = query.where('calories_burned', '<=', filters.maxCalories)
     }
 
     return await query.orderBy('date', 'desc')
@@ -136,7 +136,7 @@ export class TrainingSessionRepository
       TrainingSession.query()
         .where('userId', userId)
         .sum('duration as totalDuration')
-        .sum('caloriesBurned as totalCalories')
+        .sum('calories_burned as totalCalories')
         .count('* as totalSessions')
         .first(),
 

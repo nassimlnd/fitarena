@@ -14,6 +14,7 @@ type UpdateUserData = {
   email?: string
   password?: string
   role?: 'admin' | 'gymOwner' | 'user'
+  isActive?: boolean
 }
 
 export class UserRepository

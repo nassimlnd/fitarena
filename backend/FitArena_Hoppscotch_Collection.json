@@ -1,0 +1,1754 @@
+{
+  "v": 8,
+  "name": "FitArena API",
+  "folders": [
+    {
+      "v": 8,
+      "name": "Authentication",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "Register",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/register",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"user\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Login",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/login",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_auth"
+    },
+    {
+      "v": 8,
+      "name": "Exercises",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "List Exercises",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/exercises",
+          "params": [
+            {
+              "key": "search",
+              "value": "push",
+              "active": false
+            },
+            {
+              "key": "muscle",
+              "value": "chest",
+              "active": false
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "active": false
+            },
+            {
+              "key": "limit",
+              "value": "20",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Get Exercise",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/exercises/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Search Exercises",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/exercises/search",
+          "params": [
+            {
+              "key": "query",
+              "value": "push up",
+              "active": true
+            },
+            {
+              "key": "muscles",
+              "value": "chest",
+              "active": false
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Get Muscle Groups",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/exercises/muscles",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Exercises by Muscle",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/exercises/muscle/chest",
+          "params": [
+            {
+              "key": "page",
+              "value": "1",
+              "active": false
+            },
+            {
+              "key": "limit",
+              "value": "20",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_exercises"
+    },
+    {
+      "v": 8,
+      "name": "Challenge Exploration",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "Explore User Challenges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenges/explore/user",
+          "params": [
+            {
+              "key": "difficulty",
+              "value": "medium",
+              "active": false
+            },
+            {
+              "key": "type",
+              "value": "fitness",
+              "active": false
+            },
+            {
+              "key": "minDuration",
+              "value": "7",
+              "active": false
+            },
+            {
+              "key": "maxDuration",
+              "value": "30",
+              "active": false
+            },
+            {
+              "key": "search",
+              "value": "push up",
+              "active": false
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "active": false
+            },
+            {
+              "key": "limit",
+              "value": "20",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Explore Gym Challenges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenges/explore/gym",
+          "params": [
+            {
+              "key": "gymId",
+              "value": "1",
+              "active": false
+            },
+            {
+              "key": "search",
+              "value": "strength",
+              "active": false
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "active": false
+            },
+            {
+              "key": "limit",
+              "value": "20",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Get Challenge Details",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenges/explore/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Trending Challenges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenges/trending",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Recommended Challenges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenges/recommended",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Search Challenges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenges/search",
+          "params": [
+            {
+              "key": "query",
+              "value": "30 day",
+              "active": true
+            },
+            {
+              "key": "type",
+              "value": "all",
+              "active": false
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "active": false
+            },
+            {
+              "key": "limit",
+              "value": "20",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_challenge_explore"
+    },
+    {
+      "v": 8,
+      "name": "Challenge Participation",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "Start Challenge",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/challenges/1/start",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Claim Challenge",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/challenges/1/claim",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"notes\": \"Completed all exercises successfully!\",\n  \"completedAt\": \"2024-01-15T10:30:00Z\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "My Participations",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenges/my-participations",
+          "params": [
+            {
+              "key": "status",
+              "value": "completed",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "My Challenge Stats",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenges/my-stats",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_challenge_participation"
+    },
+    {
+      "v": 8,
+      "name": "User Challenges",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "List User Challenges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenge_clients",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Get User Challenge",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenge_clients/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Create User Challenge",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/challenge_clients",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"30-Day Push-Up Challenge\",\n  \"description\": \"Build upper body strength with daily push-ups\",\n  \"objectives\": \"Complete 1000 push-ups in 30 days\",\n  \"recommendedExercises\": \"Push-ups, Modified push-ups, Wall push-ups\",\n  \"duration\": 30,\n  \"difficulty\": \"medium\",\n  \"isPublic\": true,\n  \"type\": \"strength\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Update User Challenge",
+          "method": "PUT",
+          "endpoint": "<<HOST>>/api/challenge_clients/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Updated Challenge Name\",\n  \"description\": \"Updated description\",\n  \"difficulty\": \"hard\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Delete User Challenge",
+          "method": "DELETE",
+          "endpoint": "<<HOST>>/api/challenge_clients/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_user_challenges"
+    },
+    {
+      "v": 8,
+      "name": "Gym Challenges",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "List Gym Challenges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/gym_challenges",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Get Gym Challenge",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/gym_challenges/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Create Gym Challenge",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/gym_challenges",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Gym Strength Challenge\",\n  \"description\": \"Monthly strength building program\",\n  \"objectives\": \"Increase bench press by 20%\",\n  \"duration\": 30,\n  \"difficulty\": \"hard\",\n  \"score\": 500,\n  \"type\": \"strength\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Update Gym Challenge",
+          "method": "PUT",
+          "endpoint": "<<HOST>>/api/gym_challenges/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Updated Gym Challenge\",\n  \"score\": 750\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Delete Gym Challenge",
+          "method": "DELETE",
+          "endpoint": "<<HOST>>/api/gym_challenges/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_gym_challenges"
+    },
+    {
+      "v": 8,
+      "name": "Group Challenges",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "Create Group Challenge",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/group_challenges",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"challengeId\": 1,\n  \"groupName\": \"Fitness Warriors\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Join Group Challenge",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/group_challenges/1/join",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "My Group Challenges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/group_challenges",
+          "params": [
+            {
+              "key": "userId",
+              "value": "1",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_group_challenges"
+    },
+    {
+      "v": 8,
+      "name": "Challenge Invitations",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "Send Invitation",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/challenge_invitations",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"challengeId\": 1,\n  \"invitedUserId\": 2,\n  \"message\": \"Join me in this awesome challenge!\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Sent Invitations",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenge_invitations/sent",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Received Invitations",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/challenge_invitations/received",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Respond to Invitation",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/challenge_invitations/1/respond",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"status\": \"accepted\",\n  \"message\": \"Let's do this together!\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_challenge_invitations"
+    },
+    {
+      "v": 8,
+      "name": "Training Sessions",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "Create Training Session",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/training_sessions",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"gymId\": 1,\n  \"duration\": 60,\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"sets\": 3,\n      \"reps\": 12,\n      \"weight\": 50\n    }\n  ],\n  \"notes\": \"Great workout session!\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "My Training Sessions",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/training_sessions",
+          "params": [
+            {
+              "key": "page",
+              "value": "1",
+              "active": false
+            },
+            {
+              "key": "limit",
+              "value": "20",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Training Statistics",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/training_stats",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_training"
+    },
+    {
+      "v": 8,
+      "name": "Gamification",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "Dashboard",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/gamification/dashboard",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Available Badges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/gamification/badges",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "My Badges",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/gamification/my-badges",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Available Rewards",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/gamification/rewards",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "My Rewards",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/gamification/my-rewards",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Claim Reward",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/gamification/rewards/1/claim",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_gamification"
+    },
+    {
+      "v": 8,
+      "name": "Leaderboard",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "Global Leaderboard",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/leaderboard",
+          "params": [
+            {
+              "key": "page",
+              "value": "1",
+              "active": false
+            },
+            {
+              "key": "limit",
+              "value": "50",
+              "active": false
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "My Rank",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/leaderboard/my-rank",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_leaderboard"
+    },
+    {
+      "v": 8,
+      "name": "Gym Management",
+      "folders": [],
+      "requests": [
+        {
+          "v": "14",
+          "name": "List Approved Gyms",
+          "method": "GET",
+          "endpoint": "<<HOST>>/api/gyms",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "none",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Create Gym",
+          "method": "POST",
+          "endpoint": "<<HOST>>/api/gym",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"FitPro Gym\",\n  \"description\": \"Modern fitness facility\",\n  \"address\": \"123 Fitness St, City\",\n  \"phone\": \"+1234567890\",\n  \"email\": \"contact@fitpro.com\",\n  \"capacity\": 200,\n  \"equipment\": [\"treadmills\", \"weights\", \"yoga mats\"]\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        },
+        {
+          "v": "14",
+          "name": "Update Gym",
+          "method": "PUT",
+          "endpoint": "<<HOST>>/api/gym/1",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Updated Gym Name\",\n  \"capacity\": 250\n}"
+          },
+          "requestVariables": [],
+          "responses": {}
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_gyms"
+    },
+    {
+      "v": 8,
+      "name": "Admin",
+      "folders": [
+        {
+          "v": 8,
+          "name": "User Management",
+          "folders": [],
+          "requests": [
+            {
+              "v": "14",
+              "name": "List Users",
+              "method": "GET",
+              "endpoint": "<<HOST>>/api/admin/users",
+              "params": [
+                {
+                  "key": "role",
+                  "value": "user",
+                  "active": false
+                }
+              ],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Get User",
+              "method": "GET",
+              "endpoint": "<<HOST>>/api/admin/users/1",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Update User Role",
+              "method": "PUT",
+              "endpoint": "<<HOST>>/api/admin/users/1/role",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": "application/json",
+                "body": "{\n  \"role\": \"gymOwner\"\n}"
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Activate User",
+              "method": "POST",
+              "endpoint": "<<HOST>>/api/admin/users/1/activate",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Deactivate User",
+              "method": "POST",
+              "endpoint": "<<HOST>>/api/admin/users/1/deactivate",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Delete User",
+              "method": "DELETE",
+              "endpoint": "<<HOST>>/api/admin/users/1",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            }
+          ],
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "headers": [],
+          "_ref_id": "coll_fitarena_admin_users"
+        },
+        {
+          "v": 8,
+          "name": "Exercise Management",
+          "folders": [],
+          "requests": [
+            {
+              "v": "14",
+              "name": "List Exercises",
+              "method": "GET",
+              "endpoint": "<<HOST>>/api/admin/exercises",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Create Exercise",
+              "method": "POST",
+              "endpoint": "<<HOST>>/api/admin/exercises",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": "application/json",
+                "body": "{\n  \"name\": \"Push-ups\",\n  \"description\": \"Classic bodyweight exercise for upper body strength\",\n  \"muscles\": [\"chest\", \"triceps\", \"shoulders\"]\n}"
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Get Exercise",
+              "method": "GET",
+              "endpoint": "<<HOST>>/api/admin/exercises/1",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Update Exercise",
+              "method": "PUT",
+              "endpoint": "<<HOST>>/api/admin/exercises/1",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": "application/json",
+                "body": "{\n  \"name\": \"Modified Push-ups\",\n  \"description\": \"Updated description\"\n}"
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Delete Exercise",
+              "method": "DELETE",
+              "endpoint": "<<HOST>>/api/admin/exercises/1",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            }
+          ],
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "headers": [],
+          "_ref_id": "coll_fitarena_admin_exercises"
+        },
+        {
+          "v": 8,
+          "name": "Badge Management",
+          "folders": [],
+          "requests": [
+            {
+              "v": "14",
+              "name": "List Badges",
+              "method": "GET",
+              "endpoint": "<<HOST>>/api/admin/badges",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Create Badge",
+              "method": "POST",
+              "endpoint": "<<HOST>>/api/admin/badges",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": "application/json",
+                "body": "{\n  \"name\": \"First Challenge\",\n  \"description\": \"Complete your first challenge\",\n  \"type\": \"achievement\",\n  \"criteria\": {\n    \"type\": \"challenges_completed\",\n    \"value\": 1,\n    \"timeframe\": \"all_time\"\n  },\n  \"icon\": \"trophy\",\n  \"color\": \"#FFD700\",\n  \"points\": 100,\n  \"isActive\": true\n}"
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Award Badge",
+              "method": "POST",
+              "endpoint": "<<HOST>>/api/admin/badges/award",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": "application/json",
+                "body": "{\n  \"userId\": 1,\n  \"badgeId\": 1,\n  \"reason\": \"Manual award for exceptional performance\"\n}"
+              },
+              "requestVariables": [],
+              "responses": {}
+            }
+          ],
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "headers": [],
+          "_ref_id": "coll_fitarena_admin_badges"
+        },
+        {
+          "v": 8,
+          "name": "Gym Management",
+          "folders": [],
+          "requests": [
+            {
+              "v": "14",
+              "name": "List All Gyms",
+              "method": "GET",
+              "endpoint": "<<HOST>>/api/admin/gyms",
+              "params": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "active": false
+                }
+              ],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Pending Gyms",
+              "method": "GET",
+              "endpoint": "<<HOST>>/api/admin/gyms/pending",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Approve Gym",
+              "method": "POST",
+              "endpoint": "<<HOST>>/api/admin/gyms/1/approve",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            },
+            {
+              "v": "14",
+              "name": "Reject Gym",
+              "method": "POST",
+              "endpoint": "<<HOST>>/api/admin/gyms/1/reject",
+              "params": [],
+              "headers": [],
+              "preRequestScript": "",
+              "testScript": "",
+              "auth": {
+                "authType": "inherit",
+                "authActive": true
+              },
+              "body": {
+                "contentType": null,
+                "body": null
+              },
+              "requestVariables": [],
+              "responses": {}
+            }
+          ],
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "headers": [],
+          "_ref_id": "coll_fitarena_admin_gyms"
+        }
+      ],
+      "requests": [],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "_ref_id": "coll_fitarena_admin"
+    }
+  ],
+  "requests": [
+    {
+      "v": "14",
+      "name": "Health Check",
+      "method": "GET",
+      "endpoint": "<<HOST>>/",
+      "params": [],
+      "headers": [],
+      "preRequestScript": "",
+      "testScript": "",
+      "auth": {
+        "authType": "none",
+        "authActive": true
+      },
+      "body": {
+        "contentType": null,
+        "body": null
+      },
+      "requestVariables": [],
+      "responses": {}
+    }
+  ],
+  "auth": {
+    "authType": "bearer",
+    "token": "your-access-token-here",
+    "authActive": true
+  },
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json",
+      "active": true
+    }
+  ],
+  "_ref_id": "coll_fitarena_main"
+}

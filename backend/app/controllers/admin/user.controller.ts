@@ -1,73 +1,87 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import User from '#models/user'
 import { updateUserRoleValidator } from '#validators/admin/user'
+import { UserService } from '../../services/user.service.js'
+import { BaseController } from '../base_controller.js'
 
-export default class AdminUserController {
+export default class AdminUserController extends BaseController {
+  private userService: UserService
+
+  constructor() {
+    super()
+    this.userService = new UserService()
+  }
   async index({ request, response }: HttpContext) {
-    const { role } = request.qs()
-    const query = User.query()
+    try {
+      const { role } = request.qs()
+      const filters = role && ['admin', 'gymOwner', 'user'].includes(role) ? { role } : undefined
 
-    if (role && ['admin', 'gymOwner', 'user'].includes(role)) {
-      query.where('role', role)
+      const result = await this.userService.getAllUsers(filters)
+      return response.ok(result.data)
+    } catch (error) {
+      return this.handleServiceError(error, response)
     }
-
-    const users = await query
-    return response.ok(users)
   }
 
   async show({ params, response }: HttpContext) {
     try {
-      const user = await User.findOrFail(params.id)
-      return response.ok(user)
+      const id = this.getValidId(params.id)
+      const result = await this.userService.getUserById(id)
+      return response.ok(result.data)
     } catch (error) {
-      return response.notFound({ message: 'User not found' })
+      return this.handleServiceError(error, response)
     }
   }
 
   async updateRole({ params, request, response }: HttpContext) {
     try {
-      const user = await User.findOrFail(params.id)
+      const id = this.getValidId(params.id)
       const { role } = await request.validateUsing(updateUserRoleValidator)
 
-      if (!['admin', 'gymOwner', 'user'].includes(role)) {
-        return response.badRequest({ message: 'Invalid role' })
-      }
-
-      user.role = role
-      await user.save()
-
-      return response.ok(user)
+      const result = await this.userService.updateUserRole(id, role)
+      return response.ok(result.data)
     } catch (error) {
-      return response.notFound({ message: 'User not found' })
+      return this.handleServiceError(error, response)
     }
   }
 
-  async deactivate({ params, response }: HttpContext) {
+  async deactivate({ params, response, auth }: HttpContext) {
     try {
-      const user = await User.findOrFail(params.id)
-      // TODO: Add active/inactive status to user model
+      const id = this.getValidId(params.id)
+      const currentUser = this.getUserFromAuth(auth)
+
+      const result = await this.userService.deactivateUser(id, currentUser.id)
       return response.ok({
         message: 'User deactivated successfully',
-        user,
+        user: result.data,
       })
     } catch (error) {
-      return response.notFound({ message: 'User not found' })
+      return this.handleServiceError(error, response)
     }
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async activate({ params, response }: HttpContext) {
     try {
-      const user = await User.findOrFail(params.id)
+      const id = this.getValidId(params.id)
 
-      // Prevent admin from deleting themselves
-      if (user.id === params.currentUserId) {
-        return response.forbidden({ message: 'Cannot delete your own account' })
-      }
+      const result = await this.userService.activateUser(id)
+      return response.ok({
+        message: 'User activated successfully',
+        user: result.data,
+      })
+    } catch (error) {
+      return this.handleServiceError(error, response)
+    }
+  }
 
-      await user.delete()
+  async destroy({ params, response, auth }: HttpContext) {
+    try {
+      const id = this.getValidId(params.id)
+      const currentUser = this.getUserFromAuth(auth)
+
+      await this.userService.deleteUser(id, currentUser.id)
       return response.noContent()
     } catch (error) {
-      return response.notFound({ message: 'User not found' })
+      return this.handleServiceError(error, response)
     }
   }
 }

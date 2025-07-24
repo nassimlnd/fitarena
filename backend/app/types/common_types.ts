@@ -8,6 +8,7 @@ export interface ServiceResponse<T> {
 export interface PaginationOptions {
   page?: number
   limit?: number
+  offset?: number
 }
 
 export interface FilterOptions {
